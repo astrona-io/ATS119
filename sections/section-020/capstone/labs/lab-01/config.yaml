@@ -1,0 +1,56 @@
+# Repair The Signatures Of A Release Download
+# Astrona graded capstone. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-119-capstone-020"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-tools"
+      description: "Starts the registry and the workstation with cosign v3.1.4 and syft v1.55.0, and copies the example images"
+      type: "file"
+      source: "bootstrap/01-install-tools.sh"
+    - name: "ats-119-capstone-020-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Registry and workstation (namespaces registry and workstation)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-workstation"
+      description: "Waits until the workstation has its tools and the registry answers"
+      type: "file"
+      source: "testing/wait-for-workstation.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-files-unchanged"
+      description: "Confirms the archive and the SBOM were not changed"
+      type: "file"
+      source: "validation/validate-files-unchanged.sh"
+    - name: "validate-bundles"
+      description: "Confirms every release file verifies with its bundle and the release key"
+      type: "file"
+      source: "validation/validate-bundles.sh"
+    - name: "validate-checksums"
+      description: "Confirms SHA256SUMS lists the archive and the SBOM and matches them"
+      type: "file"
+      source: "validation/validate-checksums.sh"
+
+teardown:
+  keepCluster: false

@@ -1,0 +1,340 @@
+# Course manifest for ATS119 - Cosign Container & Blob Artifact Signing (Sigstore).
+#
+# One entry per section under `modules:`. Each section lists, in order: its
+# README, then for each module the landing page (course.md), its parts
+# (course-0N-*.md), and right after the part a lab tests, the lab's
+# question.md reading and the `type: lab` entry. The module's summary page
+# comes last. The section capstone closes the section. Playgrounds are not
+# listed: the landing page's playground marker shows them. solution.md is
+# never listed.
+#
+# Every `path:` is relative to this file.
+
+training:
+  id: ATS119
+  title: "Sigstore: Cosign Container & Blob Artifact Signing"
+  maturity: draft
+  description: >
+    Training material covering the Cosign Container & Blob Artifact Signing
+    domain of the Sigstore training path: key pairs and signing container
+    images by digest, where cosign v3 stores signatures, annotations and
+    verification, signing files and SBOMs with Sigstore bundles, in-toto
+    attestations with SLSA provenance and vulnerability scan results, policies
+    on attestation content, and managing signing keys: passwords, imported
+    keys, keys in a key management service and key rotation. Each module pairs
+    a layered reader with an ungraded hands-on playground and a graded
+    practice lab. Each section closes with an integration capstone.
+    Written for cosign v3.1.4.
+
+  certification:
+    name: Sigstore
+    code: SIGSTORE
+    provider: Astrona
+    domain: Cosign Container & Blob Artifact Signing
+    weight: 20
+
+modules:
+
+  - id: module-intro
+    title: "Introduction"
+    description: >
+      Start here. What this course trains you to do, how it is laid out, how
+      to get your machine ready with the astrona command-line tool, how the
+      content is written and checked, who maintains it, and how to report a
+      mistake.
+
+    content:
+      - type: reading
+        title: Introduction
+        path: sections/intro/README.md
+      - type: reading
+        title: "Welcome To The Course"
+        path: sections/intro/course-01-welcome.md
+      - type: reading
+        title: "Get Your Machine Ready"
+        path: sections/intro/course-02-get-your-machine-ready.md
+      - type: reading
+        title: "How This Course Is Made"
+        path: sections/intro/course-03-how-this-course-is-made.md
+
+  - id: module-010
+    title: "Signing And Verifying Container Images"
+    description: >
+      Key pairs, signing a container image by its digest, where cosign v3
+      stores the signature in the registry, annotations, and verifying a
+      signature with a public key.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-010/README.md
+
+      - type: reading
+        title: "Sign And Verify Container Images With A Key Pair"
+        path: sections/section-010/module-01/course.md
+      - type: reading
+        title: "Key Pairs And Signing An Image By Digest"
+        path: sections/section-010/module-01/course-01-key-pairs-and-signing-by-digest.md
+      - type: reading
+        title: "Where The Signature Lives In The Registry"
+        path: sections/section-010/module-01/course-02-where-signatures-live.md
+      - type: reading
+        title: "Verifying Signatures And Annotations"
+        path: sections/section-010/module-01/course-03-verifying-signatures-and-annotations.md
+      - type: reading
+        title: Question
+        path: sections/section-010/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Sign The Release Digest With Annotations Lab"
+        path: sections/section-010/module-01/labs/lab-01
+        difficulty: beginner
+        estimated_duration: 15m
+        topic: image-signing
+        task_kind: build
+        tags: [cosign, key-pair, cosign-sign, cosign-verify, digest, annotations, offline-signing]
+        learning_goals:
+          - Resolve a tag to its digest and sign that digest with the release key
+          - Add annotations to the signed payload and check them with cosign verify
+          - Prove that only the release digest carries a release signature
+        resources:
+          - name: "Signing containers"
+            url: https://docs.sigstore.dev/cosign/signing/signing_with_containers/
+          - name: "Verifying signatures"
+            url: https://docs.sigstore.dev/cosign/verifying/verify/
+          - name: "cosign sign reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_sign.md
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair The Signature Of A Release Channel Capstone"
+        path: sections/section-010/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: image-signing
+        task_kind: troubleshooting
+        tags: [cosign-sign, cosign-verify, digest, annotations, key-pair, cosign-tree]
+        learning_goals:
+          - Find out which key signed a digest by verifying with each public key
+          - Point a channel tag at the release digest and sign that digest with the release key
+          - Prove the channel verifies while the old release stays unsigned by the release key
+        resources:
+          - name: "Verifying signatures"
+            url: https://docs.sigstore.dev/cosign/verifying/verify/
+          - name: "cosign verify reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_verify.md
+
+  - id: module-020
+    title: "Signing Blobs, Bundles And SBOMs"
+    description: >
+      Signing files with cosign sign-blob, what a Sigstore bundle holds,
+      generating a software bill of materials with syft, and signing it.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-020/README.md
+
+      - type: reading
+        title: "Sign Files And SBOMs With Bundles"
+        path: sections/section-020/module-01/course.md
+      - type: reading
+        title: "Signing A File With A Bundle"
+        path: sections/section-020/module-01/course-01-signing-a-file-with-a-bundle.md
+      - type: reading
+        title: "Generating And Signing An SBOM"
+        path: sections/section-020/module-01/course-02-generating-and-signing-an-sbom.md
+      - type: reading
+        title: Question
+        path: sections/section-020/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Sign A Release Archive And Its SBOM Lab"
+        path: sections/section-020/module-01/labs/lab-01
+        difficulty: beginner
+        estimated_duration: 20m
+        topic: blob-signing
+        task_kind: build
+        tags: [sign-blob, verify-blob, bundle, sbom, spdx, syft]
+        learning_goals:
+          - Generate an SPDX JSON SBOM for the release image with syft
+          - Sign the release archive and the SBOM with the release key into bundles
+          - Prove that a changed copy of the archive no longer verifies
+        resources:
+          - name: "Signing blobs"
+            url: https://docs.sigstore.dev/cosign/signing/signing_with_blobs/
+          - name: "Sigstore bundle format"
+            url: https://docs.sigstore.dev/about/bundle/
+          - name: "cosign sign-blob reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_sign-blob.md
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-01/course-03-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Repair The Signatures Of A Release Download Capstone"
+        path: sections/section-020/capstone/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 30m
+        topic: blob-signing
+        task_kind: troubleshooting
+        tags: [sign-blob, verify-blob, bundle, sbom, checksums, key-pair]
+        learning_goals:
+          - Find which bundles fail and why with cosign verify-blob
+          - Rebuild the checksum file and sign every release file with the release key
+          - Prove every file verifies without changing the archive or the SBOM
+        resources:
+          - name: "Verifying signatures"
+            url: https://docs.sigstore.dev/cosign/verifying/verify/
+          - name: "cosign verify-blob reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_verify-blob.md
+
+  - id: module-030
+    title: "Attestations And Policies"
+    description: >
+      In-toto statements and predicate types, attaching SLSA provenance and
+      vulnerability scan results to an image with cosign attest, verifying
+      them, and checking their content with Rego policies.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-030/README.md
+
+      - type: reading
+        title: "Attach Attestations To Images"
+        path: sections/section-030/module-01/course.md
+      - type: reading
+        title: "In-Toto Statements And Predicate Types"
+        path: sections/section-030/module-01/course-01-in-toto-statements-and-predicate-types.md
+      - type: reading
+        title: "Attesting Provenance And Scan Results"
+        path: sections/section-030/module-01/course-02-attesting-provenance-and-scan-results.md
+      - type: reading
+        title: Question
+        path: sections/section-030/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Attach Provenance And Vulnerability Attestations Lab"
+        path: sections/section-030/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: attestations
+        task_kind: build
+        tags: [cosign-attest, verify-attestation, in-toto, slsa-provenance, vuln-attestation, digest]
+        learning_goals:
+          - Attach a SLSA v1 provenance predicate and a vulnerability predicate to the release digest
+          - Verify each attestation by its predicate type and read its predicate
+          - Keep the old release free of new attestations
+        resources:
+          - name: "In-toto attestations"
+            url: https://docs.sigstore.dev/cosign/verifying/attestation/
+          - name: "SLSA provenance v1"
+            url: https://slsa.dev/spec/v1.0/provenance
+          - name: "cosign attest reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_attest.md
+      - type: reading
+        title: "Checking Attestations With A Policy"
+        path: sections/section-030/module-01/course-03-checking-attestations-with-a-policy.md
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Gate A Release On Its Attestations Capstone"
+        path: sections/section-030/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 40m
+        topic: policies
+        task_kind: troubleshooting
+        tags: [verify-attestation, rego-policy, vuln-attestation, slsa-provenance, cosign-clean, cosign-attest]
+        learning_goals:
+          - Write Rego policies that reject critical vulnerabilities and an untrusted builder
+          - Replace stale attestations on the release digest so every attestation passes
+          - Prove the policies pass the release and reject the old release
+        resources:
+          - name: "In-toto attestations"
+            url: https://docs.sigstore.dev/cosign/verifying/attestation/
+          - name: "cosign verify-attestation reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_verify-attestation.md
+          - name: "cosign clean reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_clean.md
+
+  - id: module-040
+    title: "Managing Signing Keys"
+    description: >
+      Encrypted key files and their passwords, importing existing keys, keys
+      kept in a key management service such as OpenBao Transit, rotating a
+      signing key, and the signed payload cosign verifies.
+
+    content:
+      - type: reading
+        title: Section Overview
+        path: sections/section-040/README.md
+
+      - type: reading
+        title: "Manage Signing Keys"
+        path: sections/section-040/module-01/course.md
+      - type: reading
+        title: "Key Files, Passwords And Imported Keys"
+        path: sections/section-040/module-01/course-01-key-files-passwords-and-imported-keys.md
+      - type: reading
+        title: "Keys In A Key Management Service"
+        path: sections/section-040/module-01/course-02-keys-in-a-key-management-service.md
+      - type: reading
+        title: "Rotating Keys And Reading The Signed Payload"
+        path: sections/section-040/module-01/course-03-rotating-keys-and-the-signed-payload.md
+      - type: reading
+        title: Question
+        path: sections/section-040/module-01/labs/lab-01/question.md
+      - type: lab
+        title: "Rotate The Release Signing Key Lab"
+        path: sections/section-040/module-01/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: key-management
+        task_kind: migration
+        tags: [key-rotation, key-pair, cosign-sign, cosign-verify, annotations, signed-payload]
+        learning_goals:
+          - Generate a new release key pair and sign the supported release with it
+          - Keep the old signatures and leave the end-of-life release on the old key only
+          - Publish a trust set with both public keys
+        resources:
+          - name: "Key management overview"
+            url: https://docs.sigstore.dev/cosign/key_management/overview/
+          - name: "Verifying signatures"
+            url: https://docs.sigstore.dev/cosign/verifying/verify/
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-01/course-04-summary.md
+
+      - type: reading
+        title: Question
+        path: sections/section-040/capstone/labs/lab-01/question.md
+      - type: lab
+        title: "Move Release Signing Into OpenBao Transit Capstone"
+        path: sections/section-040/capstone/labs/lab-01
+        difficulty: advanced
+        estimated_duration: 35m
+        topic: key-management
+        task_kind: migration
+        tags: [kms, openbao-transit, cosign-sign, cosign-verify, key-pair, annotations]
+        learning_goals:
+          - Enable OpenBao Transit and create the release signing key in it with cosign
+          - Sign the release with the Transit key and export its public key
+          - Remove the file-based private key so no release key is left on disk
+        resources:
+          - name: "Key management overview"
+            url: https://docs.sigstore.dev/cosign/key_management/overview/
+          - name: "OpenBao Transit secrets engine"
+            url: https://openbao.org/docs/secrets/transit/
+          - name: "cosign generate-key-pair reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_generate-key-pair.md

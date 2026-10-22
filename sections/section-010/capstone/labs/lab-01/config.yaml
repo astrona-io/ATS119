@@ -1,0 +1,60 @@
+# Repair The Signature Of A Release Channel
+# Astrona graded capstone. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-119-capstone-010"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-tools"
+      description: "Starts the registry and the workstation with cosign v3.1.4 and syft v1.55.0, and copies the example images"
+      type: "file"
+      source: "bootstrap/01-install-tools.sh"
+    - name: "ats-119-capstone-010-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Registry and workstation (namespaces registry and workstation)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-workstation"
+      description: "Waits until the workstation has its tools and the registry answers"
+      type: "file"
+      source: "testing/wait-for-workstation.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-stable-points-at-release"
+      description: "Confirms the stable tag points at the 6.15.0 digest"
+      type: "file"
+      source: "validation/validate-stable-points-at-release.sh"
+    - name: "validate-stable-signed"
+      description: "Confirms the stable digest verifies with the release key and both annotations"
+      type: "file"
+      source: "validation/validate-stable-signed.sh"
+    - name: "validate-old-release-unsigned"
+      description: "Confirms 6.14.1 was not signed with the release key"
+      type: "file"
+      source: "validation/validate-old-release-unsigned.sh"
+    - name: "validate-release-key-kept"
+      description: "Confirms the release key pair was not replaced"
+      type: "file"
+      source: "validation/validate-release-key-kept.sh"
+
+teardown:
+  keepCluster: false

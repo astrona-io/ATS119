@@ -1,0 +1,157 @@
+# Every ATS119 environment (copied from ATS118's canonical environment): an OCI registry (Distribution, HTTP, lab-only)
+# reachable as registry.localtest.me:5001, and the workstation pod with the
+# Sigstore client tools. Port 5001, not 5000: macOS uses 5000 for AirPlay.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: registry
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: registry
+  namespace: registry
+  labels:
+    app: registry
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: registry
+  template:
+    metadata:
+      labels:
+        app: registry
+    spec:
+      containers:
+        - name: registry
+          image: registry:3.1.2
+          env:
+            - name: REGISTRY_HTTP_ADDR
+              value: ":5001"
+            - name: REGISTRY_STORAGE_DELETE_ENABLED
+              value: "true"
+          ports:
+            - name: http
+              containerPort: 5001
+          readinessProbe:
+            httpGet:
+              path: /v2/
+              port: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: registry
+  namespace: registry
+spec:
+  selector:
+    app: registry
+  ports:
+    - name: http
+      port: 5001
+      targetPort: http
+---
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: workstation
+---
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: workstation-setup
+  namespace: workstation
+data:
+  install-tools.sh: |
+    #!/bin/sh
+    # Downloads the pinned Sigstore client tools into /tools (an emptyDir
+    # shared with the main container). Runs once, as an init container.
+    set -eu
+    COSIGN_VERSION=3.1.4
+    REKOR_VERSION=1.5.5
+    GITSIGN_VERSION=0.18.0
+    REGCTL_VERSION=0.11.7
+    SYFT_VERSION=1.55.0
+    ARCH="$(uname -m)"
+    case "$ARCH" in x86_64) ARCH=amd64 ;; aarch64|arm64) ARCH=arm64 ;; esac
+    wget -q "https://github.com/sigstore/cosign/releases/download/v${COSIGN_VERSION}/cosign-linux-${ARCH}" -O /tools/cosign
+    wget -q "https://github.com/sigstore/rekor/releases/download/v${REKOR_VERSION}/rekor-cli-linux-${ARCH}" -O /tools/rekor-cli
+    wget -q "https://github.com/sigstore/gitsign/releases/download/v${GITSIGN_VERSION}/gitsign_${GITSIGN_VERSION}_linux_${ARCH}" -O /tools/gitsign
+    wget -q "https://github.com/regclient/regclient/releases/download/v${REGCTL_VERSION}/regctl-linux-${ARCH}" -O /tools/regctl
+    wget -q "https://github.com/anchore/syft/releases/download/v${SYFT_VERSION}/syft_${SYFT_VERSION}_linux_${ARCH}.tar.gz" -O /tmp/syft.tgz
+    tar -xzf /tmp/syft.tgz -C /tools syft
+    chmod 0755 /tools/*
+    ls -l /tools
+  # A signing configuration that lists no Fulcio, Rekor or timestamp
+  # service: cosign signs with the key only and uploads nothing to a
+  # public log. Lab-only; see the course pages.
+  offline-signing-config.json: |
+    {
+      "mediaType": "application/vnd.dev.sigstore.signingconfig.v0.2+json",
+      "caUrls": [],
+      "oidcUrls": [],
+      "rekorTlogUrls": [],
+      "tsaUrls": [],
+      "rekorTlogConfig": {"selector": "ANY"},
+      "tsaConfig": {"selector": "ANY"}
+    }
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: workstation
+  namespace: workstation
+  labels:
+    app: workstation
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: workstation
+  template:
+    metadata:
+      labels:
+        app: workstation
+    spec:
+      initContainers:
+        - name: install-tools
+          image: alpine:3.22
+          command: ["sh", "/setup/install-tools.sh"]
+          volumeMounts:
+            - name: tools
+              mountPath: /tools
+            - name: setup
+              mountPath: /setup
+      containers:
+        - name: workstation
+          image: alpine:3.22
+          command: ["sh", "-c", "apk add --no-cache curl jq git openssl >/dev/null && /tools/regctl registry set registry.localtest.me:5001 --tls disabled && while true; do sleep 30; done"]
+          env:
+            - name: PATH
+              value: /tools:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+            - name: REGISTRY
+              value: registry.localtest.me:5001
+            - name: SYFT_REGISTRY_INSECURE_USE_HTTP
+              value: "true"
+            # OpenBao in development mode (namespace kms). Lab-only token.
+            - name: BAO_ADDR
+              value: http://openbao.kms:8200
+            - name: BAO_TOKEN
+              value: root
+          workingDir: /work
+          volumeMounts:
+            - name: tools
+              mountPath: /tools
+            - name: setup
+              mountPath: /setup
+            - name: work
+              mountPath: /work
+      volumes:
+        - name: tools
+          emptyDir: {}
+        - name: setup
+          configMap:
+            name: workstation-setup
+        - name: work
+          emptyDir: {}

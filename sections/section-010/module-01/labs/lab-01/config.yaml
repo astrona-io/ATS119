@@ -1,0 +1,56 @@
+# Sign The Release Digest With Annotations
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-119-lab-010-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-tools"
+      description: "Starts the registry and the workstation with cosign v3.1.4 and syft v1.55.0, and copies the example images"
+      type: "file"
+      source: "bootstrap/01-install-tools.sh"
+    - name: "ats-119-lab-010-01-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Registry and workstation (namespaces registry and workstation)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-workstation"
+      description: "Waits until the workstation has its tools and the registry answers"
+      type: "file"
+      source: "testing/wait-for-workstation.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-release-signed"
+      description: "Confirms the 6.15.0 digest verifies with the release public key"
+      type: "file"
+      source: "validation/validate-release-signed.sh"
+    - name: "validate-annotations"
+      description: "Confirms the signature carries release=6.15.0 and team=inventory"
+      type: "file"
+      source: "validation/validate-annotations.sh"
+    - name: "validate-only-release-signed"
+      description: "Confirms 6.14.1 was not signed with the release key"
+      type: "file"
+      source: "validation/validate-only-release-signed.sh"
+
+teardown:
+  keepCluster: false

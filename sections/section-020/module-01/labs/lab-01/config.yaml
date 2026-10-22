@@ -1,0 +1,60 @@
+# Sign A Release Archive And Its SBOM
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-119-lab-020-01"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+
+bootstrap:
+  init:
+    - name: "install-tools"
+      description: "Starts the registry and the workstation with cosign v3.1.4 and syft v1.55.0, and copies the example images"
+      type: "file"
+      source: "bootstrap/01-install-tools.sh"
+    - name: "ats-119-lab-020-01-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Registry and workstation (namespaces registry and workstation)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+
+testing:
+  init:
+    - name: "wait-for-workstation"
+      description: "Waits until the workstation has its tools and the registry answers"
+      type: "file"
+      source: "testing/wait-for-workstation.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+
+validation:
+  scripts:
+    - name: "validate-archive-unchanged"
+      description: "Confirms the release archive was not changed"
+      type: "file"
+      source: "validation/validate-archive-unchanged.sh"
+    - name: "validate-archive-bundle"
+      description: "Confirms the archive verifies with its bundle and the release key"
+      type: "file"
+      source: "validation/validate-archive-bundle.sh"
+    - name: "validate-sbom"
+      description: "Confirms the SBOM is SPDX JSON for podinfo and verifies with its bundle"
+      type: "file"
+      source: "validation/validate-sbom.sh"
+    - name: "validate-tamper-detected"
+      description: "Confirms a changed copy of the archive does not verify with the bundle"
+      type: "file"
+      source: "validation/validate-tamper-detected.sh"
+
+teardown:
+  keepCluster: false
