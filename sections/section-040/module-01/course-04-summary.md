@@ -6,7 +6,7 @@ A key management service (KMS) keeps the private key inside the service, so no k
 
 The signed payload of an image names the repository and the digest in its `critical` part and carries annotations in `optional`. It does not name the key: which key signed is found by verifying with each trusted public key.
 
-Rotating a key on schedule means signing every supported release with the new key, keeping the old signatures, leaving end-of-life releases alone, and publishing both public keys as a trust set until the old key retires. A leaked key is different: remove it from every trust set at once, remove its signatures with `cosign clean --type all`, and sign again with a new key. The key facts to remember are these:
+Rotating a key on schedule means signing every supported release with the new key, keeping the old signatures, leaving end-of-life releases alone, and publishing both public keys as a trust set until the old key retires. A leaked key is different: remove it from every trust set at once, remove its signatures (with `cosign clean` on an HTTPS registry, or `regctl manifest delete --referrers` on the plain-HTTP lab registry), and sign again with a new key. The key facts to remember are these:
 
 - Never keep an unencrypted PEM after an import.
 - Give verifiers public keys, never KMS tokens.

@@ -53,7 +53,9 @@ Both keys verify the current release. `cosign verify` takes one key at a time, s
 
 ## When a key leaks
 
-A leak is different from a scheduled rotation. Every signature from the leaked key may be forged, so you cannot keep them. You create a new key, re-sign the releases you still stand behind, remove the leaked key from every trust set at once, and remove its signatures before you sign again. cosign v3 stores signatures as referrers, so `cosign clean --type all` (or `--type referrer`) is the command that removes them; it removes everything attached to that digest, so attach the attestations you still need again afterwards. The old public key must disappear from the trust set, or forged signatures keep verifying.
+A leak is different from a scheduled rotation. Every signature from the leaked key may be forged, so you cannot keep them. You create a new key, re-sign the releases you still stand behind, remove the leaked key from every trust set at once, and remove its signatures before you sign again. The old public key must disappear from the trust set, or forged signatures keep verifying.
+
+cosign v3 stores signatures as OCI referrers: artifacts in the registry whose `subject` field points at the image digest. `cosign clean` removes referrers, but cosign 3.1.4 ignores `--allow-http-registry` for it, so it only works against an HTTPS registry. On the lab registry, list the referrers with `regctl artifact list` and delete each one with `regctl manifest delete --referrers`. This removes everything attached to that digest, so attach the attestations you still need again afterwards.
 
 You can now read what a signature covers and replace a release key while users keep verifying. The rest of this module's practice is in the lab.
 

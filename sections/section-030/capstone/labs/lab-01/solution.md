@@ -65,17 +65,21 @@ Both fail, as they must.
 
 ## Step 3: Replace the stale attestations of 6.15.0
 
-Every attestation of a type must pass the policy, so attaching the rescan next to the stale scan is not enough. Remove what is attached to the 6.15.0 digest, then attest the rescan and the release provenance:
+Every attestation of a type must pass the policy, so attaching the rescan next to the stale scan is not enough. Remove what is attached to the 6.15.0 digest, then attest the rescan and the release provenance.
+
+cosign v3 stores attestations as OCI referrers: artifacts in the registry whose `subject` field points at the image digest. `cosign clean` removes referrers, but cosign 3.1.4 ignores `--allow-http-registry` for it, so it only works against an HTTPS registry. Use `regctl` instead, which already talks plain HTTP to the lab registry. `regctl artifact list` prints the digest of each referrer, and `regctl manifest delete --referrers` deletes each one:
 
 ```sh
-cosign clean --type all -f --allow-http-registry $REPO@$CURRENT
+for referrer in $(regctl artifact list $REPO@$CURRENT --format '{{range .Descriptors}}{{.Digest}} {{end}}'); do
+  regctl manifest delete --referrers $REPO@$referrer
+done
 cosign attest --key /work/keys/release.key --signing-config $SC --allow-http-registry -y \
   --type vuln --predicate /work/predicates/vuln-rescan.json $REPO@$CURRENT
 cosign attest --key /work/keys/release.key --signing-config $SC --allow-http-registry -y \
   --type slsaprovenance1 --predicate /work/predicates/provenance-release.json $REPO@$CURRENT
 ```
 
-`cosign clean` works on one digest only, so 6.14.1 keeps its attestations.
+`regctl artifact list` lists the referrers of one digest only, so 6.14.1 keeps its attestations. The lab registry has no referrers API, so the clients keep the list of referrers in a tag named `sha256-<digest>`. The `--referrers` flag tells `regctl` to remove each deleted manifest from that list too; without it, the list still names the stale attestations.
 
 ## Step 4: Run the gate
 
@@ -98,5 +102,5 @@ astrona submit -c sections/section-030/capstone/labs/lab-01
 | --- | --- |
 | Attach the rescan without removing the stale scan | The stale scan still fails the policy, so the whole check fails |
 | Write `allow { true }` | 6.14.1 passes too, and the grader's reference policies catch the critical findings |
-| Clean 6.14.1 so the old release stops failing | Its attestations are its history; the grader checks they are still there |
+| Remove the attestations of 6.14.1 so the old release stops failing | Its attestations are its history; the grader checks they are still there |
 | Write `allow if { ... }` | cosign evaluates Rego v0 syntax and refuses the policy |

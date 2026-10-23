@@ -76,9 +76,19 @@ The release scan has one low finding and no critical ones, so the policy passes.
 
 ## Every attestation must pass
 
-One rule of `verify-attestation` surprises many people: **every attestation of the requested type must pass the policy**. If an image carries an old scan with critical findings and a new clean scan, the check fails, because the old one fails. cosign does not pick the newest or the best one.
+One rule of `verify-attestation` surprises many people: **every attestation of the requested type must pass the policy**. If an image carries an old scan with critical findings and a new clean scan, the check fails, because the old one fails. cosign does not pick the newest or the best one. So when a scan or a build is redone, the old attestation must go before the gate can pass.
 
-So when a scan or a build is redone, the old attestation must go before the gate can pass. `cosign clean` removes what is attached to an image, and `-f` skips the confirmation. Its `--type` takes `signature`, `attestation`, `referrer` or `all`; because cosign v3 stores signatures and attestations as referrers, use `--type all`, which removes everything attached to that one digest. After a clean, attach the new attestations again, and sign the image again if it needs a signature. Never clean an image you do not mean to change: the attestations of an old release are its history.
+cosign v3 stores signatures and attestations as OCI referrers: artifacts in the registry whose `subject` field points at the image digest. `cosign clean` removes referrers, but cosign 3.1.4 ignores `--allow-http-registry` for it, so it only works against an HTTPS registry. In the lab, `regctl` does it instead, because it already talks plain HTTP to the lab registry.
+
+`regctl artifact list` prints the digest of each referrer of the image, and `regctl manifest delete --referrers` deletes each one. This loop removes everything attached to the release digest:
+
+```sh
+for referrer in $(regctl artifact list $REPO@$DIGEST --format '{{range .Descriptors}}{{.Digest}} {{end}}'); do
+  regctl manifest delete --referrers $REPO@$referrer
+done
+```
+
+The `--referrers` flag also removes each deleted manifest from the list of referrers that the clients keep for that digest; without it, the list still names the deleted attestation. The loop touches one digest only, and the image itself stays. Afterwards, attach the new attestations again, and sign the image again if it needs a signature. Never remove the referrers of an image you do not mean to change: the attestations of an old release are its history.
 
 You can now turn a review rule into a policy file and let cosign apply it, and you know why stale attestations must be removed before a gate passes.
 
@@ -89,4 +99,5 @@ You can now turn a review rule into a policy file and let cosign apply it, and y
 > - **Using another package name.** cosign asks for `data.signature.allow`, so the package must be `signature`.
 > - **Forgetting `default allow = false`.** Without it, a statement that matches no rule leaves `allow` undefined, which cosign also treats as a failure, but the intent is less clear.
 > - **Expecting the newest attestation to win.** Every attestation of the type must pass. Remove stale ones.
+> - **Deleting a referrer without `--referrers`.** The list of referrers for the digest still names the deleted manifest.
 > - **Writing a policy that passes everything.** Test it against an input that must fail, not only against one that must pass.

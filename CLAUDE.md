@@ -265,12 +265,18 @@ Ranked risks to check first:
 2. **What `cosign verify-attestation` prints.** Graders take `.payload` from
    each output line, base64-decode it and read the in-toto statement. Check
    that the v3 bundle-format output still has a top-level `payload`.
-3. **`cosign clean --type all` on bundle-format referrers.** v3 signatures
-   and attestations are referrers, so `--type signature` or `--type
-   attestation` may not remove them; the course always uses `--type all` (or
-   `referrer`). The capstone of section 030 removes the stale attestations of
-   a digest with it, then attests again. Check that it removes exactly the
-   referrers of that one digest.
+3. **Removing referrers with `regctl`, not `cosign clean`.** cosign 3.1.4
+   `clean` ignores `--allow-http-registry` (and `--allow-insecure-registry`)
+   and fails against the lab registry with `http: server gave HTTP response
+   to HTTPS client` (seen 2026-10-23). The course removes signatures and
+   attestations with `regctl artifact list <repo>@<digest>` and `regctl
+   manifest delete --referrers <repo>@<referrer>` for each referrer; pages say
+   in one sentence that `cosign clean` does this job but only works against
+   an HTTPS registry. `--referrers` is required: registry 3.1.2 has no
+   referrers API, and without the flag the fallback `sha256-<digest>` tag
+   still lists the deleted manifests. The workstation runs `regctl registry
+   set registry.localtest.me:5001 --tls disabled` at start. Tested against
+   registry 3.1.2 with regctl v0.11.6; not yet run in an `astrona test`.
 4. **The OpenBao Transit provider.** cosign v3.1.4 uses
    `sigstore/sigstore/pkg/signature/kms/hashivault` v1.11.1, which registers
    both `hashivault://` and `openbao://` and reads `VAULT_ADDR`/`BAO_ADDR`,
@@ -299,7 +305,8 @@ All of these come from `doc/` and `cmd/cosign/cli/options/` at `v3.1.4`:
   The flag text says the artifact "cannot be publicly verified". Pages say
   this every time and never use it where a log entry is the point.
 - **HTTP registry:** `--allow-http-registry` on `sign`, `verify`, `attest`,
-  `verify-attestation`, `tree`, `download` and `clean`.
+  `verify-attestation`, `tree` and `download`. `clean` has the flag but
+  ignores it, so the course removes referrers with `regctl` instead.
 - **`generate-key-pair`** writes an encrypted `cosign.key` and `cosign.pub`
   (prefix with `--output-key-prefix`), asks for a password or reads
   `COSIGN_PASSWORD`, and has no algorithm flag (the key is ECDSA P-256).
@@ -325,7 +332,8 @@ All of these come from `doc/` and `cmd/cosign/cli/options/` at `v3.1.4`:
   of the generated `doc/` pages. Their messages point to `oras` for attaching
   artifacts and to `oras discover` or `cosign tree` for listing referrers.
   `cosign clean --type` takes `signature|attestation|referrer|sbom|all`
-  (`sbom` is deprecated).
+  (`sbom` is deprecated). The course does not run `clean` against the lab
+  registry (see risk 3).
 - **KMS references:** `awskms://`, `gcpkms://`, `azurekms://`,
   `hashivault://` (and `openbao://`), `k8s://`, `gitlab://`, `github://` (key
   generation), `env://`, `pkcs11:`.

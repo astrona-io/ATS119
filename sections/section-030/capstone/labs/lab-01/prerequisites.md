@@ -4,7 +4,7 @@ Before starting this capstone you should be able to:
 
 - Attach and verify attestations with `cosign attest` and `cosign verify-attestation`.
 - Write a small Rego rule with `package`, `default` and a rule body.
-- Remove signatures and attestations from an image with `cosign clean`.
+- Remove the signatures and attestations of an image with `regctl artifact list` and `regctl manifest delete --referrers`.
 
 ## What the environment gives you
 

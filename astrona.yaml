@@ -255,7 +255,7 @@ modules:
         estimated_duration: 40m
         topic: policies
         task_kind: troubleshooting
-        tags: [verify-attestation, rego-policy, vuln-attestation, slsa-provenance, cosign-clean, cosign-attest]
+        tags: [verify-attestation, rego-policy, vuln-attestation, slsa-provenance, oci-referrers, cosign-attest]
         learning_goals:
           - Write Rego policies that reject critical vulnerabilities and an untrusted builder
           - Replace stale attestations on the release digest so every attestation passes
@@ -265,8 +265,6 @@ modules:
             url: https://docs.sigstore.dev/cosign/verifying/attestation/
           - name: "cosign verify-attestation reference (v3.1.4)"
             url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_verify-attestation.md
-          - name: "cosign clean reference (v3.1.4)"
-            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_clean.md
 
   - id: module-040
     title: "Managing Signing Keys"

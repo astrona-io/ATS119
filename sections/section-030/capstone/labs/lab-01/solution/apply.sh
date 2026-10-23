@@ -86,7 +86,20 @@ allow {
 }
 JSON_EOF
 
+# remove_referrers REF: deletes every OCI referrer (signature or attestation)
+# of REF, a reference by digest. cosign clean would do this, but cosign 3.1.4
+# ignores --allow-http-registry for clean, so it fails on the plain-HTTP lab
+# registry. --referrers also removes each manifest from the referrers list in
+# the sha256-<digest> tag (registry 3.1.2 has no referrers API).
+remove_referrers() {
+  local repo="${1%@*}" referrers referrer
+  referrers="$(ws regctl artifact list "$1" --format '{{range .Descriptors}}{{.Digest}} {{end}}' | tr -d '\r')"
+  for referrer in $referrers; do
+    ws regctl manifest delete --referrers "$repo@$referrer" >/dev/null
+  done
+}
+
 D="$(digest_of 6.15.0)"
-ws cosign clean --type all -f --allow-http-registry "$REPO@$D" >/dev/null
+remove_referrers "$REPO@$D"
 ws_sh "COSIGN_PASSWORD=$LAB_PASSWORD cosign attest -y --key /work/keys/release.key --signing-config $OFFLINE_SC --allow-http-registry --type vuln --predicate /work/predicates/vuln-rescan.json $REPO@$D >/dev/null"
 ws_sh "COSIGN_PASSWORD=$LAB_PASSWORD cosign attest -y --key /work/keys/release.key --signing-config $OFFLINE_SC --allow-http-registry --type slsaprovenance1 --predicate /work/predicates/provenance-release.json $REPO@$D >/dev/null"
