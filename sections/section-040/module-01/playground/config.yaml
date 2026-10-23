@@ -7,7 +7,6 @@ metadata:
   name: "ats-119-playground-040-01"
   docs:
     guide: "docs/overview.md"
-
 bootstrap:
   init:
     - name: "prepare"
@@ -19,6 +18,11 @@ bootstrap:
       description: "Registry and workstation (namespaces registry and workstation)."
       type: "file"
       source: "manifests/lab-start.yaml"
-
 teardown:
   keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - alpine:3.22
+      - quay.io/openbao/openbao:2.7.1
+      - registry:3.1.2
