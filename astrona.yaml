@@ -30,8 +30,6 @@ training:
     name: Sigstore
     code: SIGSTORE
     provider: Astrona
-    domain: Cosign Container & Blob Artifact Signing
-    weight: 20
 
 modules:
 
