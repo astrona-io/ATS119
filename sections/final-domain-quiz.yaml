@@ -1,0 +1,293 @@
+# Final domain knowledge check across all four sections.
+schema_version: 1
+kind: question_bank
+id: ats119-final
+course_id: ATS119
+exam_code: SIGSTORE
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: domain
+  id: cosign-artifact-signing
+  title: Cosign Container & Blob Artifact Signing
+placement:
+  position: after
+  reading: sections/section-040/capstone/labs/lab-01/question.md
+questions:
+- id: ats119-final-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Choose what to sign
+  source_readings:
+  - sections/section-010/module-01/course-01-key-pairs-and-signing-by-digest.md
+  prompt: Why does the module sign `$REPO@$DIGEST` and not `$REPO:6.15.0`?
+  options:
+  - id: a
+    text: A digest is encrypted and a tag is not.
+    explanation: Not correct. A digest is a SHA-256 hash, not an encrypted value.
+  - id: b
+    text: A tag can be moved to another image, but a digest names one exact image.
+    explanation: Correct. The signature then covers exactly the image that was checked.
+  - id: c
+    text: cosign refuses to sign any tag.
+    explanation: Not correct. cosign signs a tag, resolves it and warns.
+  - id: d
+    text: A digest makes the image smaller in the registry.
+    explanation: Not correct. The digest does not change the image size.
+  correct_option: b
+  explanation: Correct. The signature then covers exactly the image that was checked.
+- id: ats119-final-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find signatures in a registry
+  source_readings:
+  - sections/section-010/module-01/course-02-where-signatures-live.md
+  prompt: "`regctl tag ls` shows no `.sig` tag for a digest that was signed with cosign
+    v3. What does this mean?"
+  options:
+  - id: a
+    text: Nothing yet. cosign v3 stores bundles as referrers, so check with `cosign
+      tree` or `regctl artifact list`.
+    explanation: Correct. The `.sig` tag is the older layout.
+  - id: b
+    text: The image is unsigned.
+    explanation: Not correct. A v3 signature is a referrer and has no `.sig` tag.
+  - id: c
+    text: The registry deleted the signature.
+    explanation: Not correct. Nothing says it was deleted.
+  - id: d
+    text: The signature was made with the wrong key.
+    explanation: Not correct. The key does not decide which tags exist.
+  correct_option: a
+  explanation: Correct. The `.sig` tag is the older layout.
+- id: ats119-final-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use annotations as a filter
+  source_readings:
+  - sections/section-010/module-01/course-03-verifying-signatures-and-annotations.md
+  prompt: An image has one signature without annotations. `cosign verify` runs without
+    `-a`. What happens?
+  options:
+  - id: a
+    text: It passes, because any valid signature from the key is enough.
+    explanation: Correct. `-a` is a filter that is only applied when you give it.
+  - id: b
+    text: It fails, because the signature has no annotations.
+    explanation: Not correct. Without `-a` there is no annotation condition.
+  - id: c
+    text: It fails, because annotations are always required.
+    explanation: Not correct. They are required only when you ask with `-a`.
+  - id: d
+    text: It asks for a password.
+    explanation: Not correct. Verification uses the public key only.
+  correct_option: a
+  explanation: Correct. `-a` is a filter that is only applied when you give it.
+- id: ats119-final-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Sign a file
+  source_readings:
+  - sections/section-020/module-01/course-01-signing-a-file-with-a-bundle.md
+  prompt: Which command signs a file of any kind and writes the result to a bundle?
+  options:
+  - id: a
+    text: "`cosign sign <file>`"
+    explanation: Not correct. `cosign sign` signs an image in a registry.
+  - id: b
+    text: "`cosign sign-blob --bundle <file>.sigstore.json <file>` with a key."
+    explanation: Correct. It hashes the file, signs the hash and writes the bundle.
+  - id: c
+    text: "`cosign attest --bundle <file>`"
+    explanation: Not correct. `cosign attest` attaches a signed statement to an image.
+  - id: d
+    text: "`cosign verify-blob --bundle <file>`"
+    explanation: Not correct. That command checks a bundle. It does not create one.
+  correct_option: b
+  explanation: Correct. It hashes the file, signs the hash and writes the bundle.
+- id: ats119-final-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Trust the public key
+  source_readings:
+  - sections/section-020/module-01/course-01-signing-a-file-with-a-bundle.md
+  prompt: The bundle contains only a hint about the key. Why does a verifier need
+    its own copy of the public key?
+  options:
+  - id: a
+    text: If the bundle carried its own key, anyone could sign anything and the check
+      would pass.
+    explanation: Correct. The verifier must get the key from a trusted place.
+  - id: b
+    text: Because the bundle is encrypted.
+    explanation: Not correct. The bundle is plain JSON.
+  - id: c
+    text: Because the hint is always wrong.
+    explanation: Not correct. The hint helps pick the key. It cannot prove trust.
+  - id: d
+    text: Because cosign cannot read JSON.
+    explanation: Not correct. cosign reads the bundle.
+  correct_option: a
+  explanation: Correct. The verifier must get the key from a trusted place.
+- id: ats119-final-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Scan the digest
+  source_readings:
+  - sections/section-020/module-01/course-02-generating-and-signing-an-sbom.md
+  prompt: Why does the module scan the image digest and not the tag?
+  options:
+  - id: a
+    text: syft cannot read tags.
+    explanation: Not correct. The reason is accuracy, not a syft limit.
+  - id: b
+    text: The SBOM then describes exactly the image that is signed, even if the tag
+      moves.
+    explanation: Correct. A tag could point at a different image later.
+  - id: c
+    text: A digest scan is faster.
+    explanation: Not correct. Speed is not the reason.
+  - id: d
+    text: Tags are not allowed in SPDX.
+    explanation: Not correct. SPDX does not forbid tags.
+  correct_option: b
+  explanation: Correct. A tag could point at a different image later.
+- id: ats119-final-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know who fills the subject
+  source_readings:
+  - sections/section-030/module-01/course-01-in-toto-statements-and-predicate-types.md
+  prompt: Who puts the image digest into the `subject` of the statement when you run
+    `cosign attest`?
+  options:
+  - id: a
+    text: You do, inside the predicate file.
+    explanation: Not correct. cosign builds the subject.
+  - id: b
+    text: The registry, when it stores the attestation.
+    explanation: Not correct. The registry stores what cosign pushes.
+  - id: c
+    text: The scanner, when it writes the report.
+    explanation: Not correct. The scanner does not know the attested image reference.
+  - id: d
+    text: cosign does, from the image reference you give.
+    explanation: Correct. The predicate file holds only the predicate.
+  correct_option: d
+  explanation: Correct. The predicate file holds only the predicate.
+- id: ats119-final-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know the Rego contract
+  source_readings:
+  - sections/section-030/module-01/course-03-checking-attestations-with-a-policy.md
+  prompt: Which package name and rule does cosign v3.1.4 evaluate in a Rego policy?
+  options:
+  - id: a
+    text: "`package policy` and the rule `deny`"
+    explanation: Not correct. cosign asks for `data.signature.allow`.
+  - id: b
+    text: "`package signature` and the rule `allow`"
+    explanation: Correct. The input is the verified in-toto statement.
+  - id: c
+    text: "`package cosign` and the rule `verify`"
+    explanation: Not correct. These names are not used.
+  - id: d
+    text: "`package main` and the rule `result`"
+    explanation: Not correct. cosign does not evaluate these.
+  correct_option: b
+  explanation: Correct. The input is the verified in-toto statement.
+- id: ats119-final-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Apply a policy to all attestations
+  source_readings:
+  - sections/section-030/module-01/course-03-checking-attestations-with-a-policy.md
+  prompt: An image has an old scan with critical findings and a new clean scan. The
+    scan policy denies critical findings. What does `verify-attestation --type vuln
+    --policy` do?
+  options:
+  - id: a
+    text: It passes, because the newest attestation wins.
+    explanation: Not correct. cosign does not rank attestations.
+  - id: b
+    text: It passes, because one passing attestation is enough.
+    explanation: Not correct. Every attestation of the type must pass.
+  - id: c
+    text: It fails, because every attestation of the type must pass and the old scan
+      does not.
+    explanation: Correct. cosign does not choose the newest one.
+  - id: d
+    text: It deletes the old scan and passes.
+    explanation: Not correct. cosign never deletes attestations.
+  correct_option: c
+  explanation: Correct. cosign does not choose the newest one.
+- id: ats119-final-q10
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Handle the password in a pipeline
+  source_readings:
+  - sections/section-040/module-01/course-01-key-files-passwords-and-imported-keys.md
+  prompt: How should a pipeline give cosign the key password?
+  options:
+  - id: a
+    text: From the pipeline secret store into the `COSIGN_PASSWORD` environment variable.
+    explanation: Correct. The password never belongs in a script or a repository.
+  - id: b
+    text: As a line in the script, next to the key.
+    explanation: Not correct. That puts the password where the key is.
+  - id: c
+    text: In the file name of the key.
+    explanation: Not correct. File names are not secret.
+  - id: d
+    text: In the `optional` part of the payload.
+    explanation: Not correct. That would publish it.
+  correct_option: a
+  explanation: Correct. The password never belongs in a script or a repository.
+- id: ats119-final-q11
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Define a KMS key
+  source_readings:
+  - sections/section-040/module-01/course-02-keys-in-a-key-management-service.md
+  prompt: What is the main benefit of a key in a key management service (KMS)?
+  options:
+  - id: a
+    text: The key can be copied to any laptop.
+    explanation: Not correct. Not copying it is the point.
+  - id: b
+    text: Signatures are no longer needed.
+    explanation: Not correct. The KMS still produces signatures.
+  - id: c
+    text: Verifiers need a KMS token.
+    explanation: Not correct. Verifiers only need the public key.
+  - id: d
+    text: The private key is created inside the service and never leaves it. The signer
+      asks the service to sign.
+    explanation: Correct. There is no key file to copy.
+  correct_option: d
+  explanation: Correct. There is no key file to copy.
+- id: ats119-final-q12
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Plan a scheduled rotation
+  source_readings:
+  - sections/section-040/module-01/course-03-rotating-keys-and-the-signed-payload.md
+  prompt: Which steps fit a scheduled key rotation in this module?
+  options:
+  - id: a
+    text: Sign supported releases with the new key, keep the old signatures, skip
+      end-of-life releases and publish both public keys.
+    explanation: Correct. Users who trust only the old key keep working.
+  - id: b
+    text: Delete the old signatures first, then sign.
+    explanation: Not correct. Users who have not updated would start failing.
+  - id: c
+    text: Re-sign every release, including end-of-life ones.
+    explanation: Not correct. The new key should not vouch for them.
+  - id: d
+    text: Publish only the new public key.
+    explanation: Not correct. Users still need the old one during the change.
+  correct_option: a
+  explanation: Correct. Users who trust only the old key keep working.

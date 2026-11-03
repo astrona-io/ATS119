@@ -1,0 +1,244 @@
+# Knowledge check for section 040. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats119-040
+course_id: ATS119
+exam_code: SIGSTORE
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-040
+  title: Managing Signing Keys
+placement:
+  position: after
+  reading: sections/section-040/capstone/labs/lab-01/question.md
+questions:
+- id: ats119-040-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain how a cosign key file is protected
+  source_readings:
+  - sections/section-040/module-01/course-01-key-files-passwords-and-imported-keys.md
+  prompt: How does cosign protect the private key file `release.key`?
+  options:
+  - id: a
+    text: It stores the key in plain text and hides the file name.
+    explanation: Not correct. The key is encrypted.
+  - id: b
+    text: It stores the key in the registry.
+    explanation: Not correct. The key file stays local.
+  - id: c
+    text: It signs the key with the public key.
+    explanation: Not correct. The public key cannot encrypt a key file for signing.
+  - id: d
+    text: It encrypts the key with a key derived from the password using scrypt.
+    explanation: Correct. A copied file is useless without the password.
+  correct_option: d
+  explanation: Correct. A copied file is useless without the password.
+- id: ats119-040-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Handle the password in a pipeline
+  source_readings:
+  - sections/section-040/module-01/course-01-key-files-passwords-and-imported-keys.md
+  prompt: How should a pipeline give cosign the key password?
+  options:
+  - id: a
+    text: From the pipeline secret store into the `COSIGN_PASSWORD` environment variable.
+    explanation: Correct. The password never belongs in a script or a repository.
+  - id: b
+    text: As a line in the script, next to the key.
+    explanation: Not correct. That puts the password where the key is.
+  - id: c
+    text: In the file name of the key.
+    explanation: Not correct. File names are not secret.
+  - id: d
+    text: In the `optional` part of the payload.
+    explanation: Not correct. That would publish it.
+  correct_option: a
+  explanation: Correct. The password never belongs in a script or a repository.
+- id: ats119-040-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Import an existing key
+  source_readings:
+  - sections/section-040/module-01/course-01-key-files-passwords-and-imported-keys.md
+  prompt: A team has an OpenSSL elliptic-curve key in PEM format. Which command brings
+    it into cosign?
+  options:
+  - id: a
+    text: "`cosign generate-key-pair --key existing-ec.pem`"
+    explanation: Not correct. That creates a new key.
+  - id: b
+    text: "`cosign import-key-pair --key existing-ec.pem --output-key-prefix imported`"
+    explanation: Correct. It writes `imported.key`, encrypted, and `imported.pub`.
+  - id: c
+    text: "`cosign public-key --key existing-ec.pem`"
+    explanation: Not correct. That prints a public key.
+  - id: d
+    text: "`cosign sign-blob --key existing-ec.pem`"
+    explanation: Not correct. That signs a file.
+  correct_option: b
+  explanation: Correct. It writes `imported.key`, encrypted, and `imported.pub`.
+- id: ats119-040-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Recover a public key
+  source_readings:
+  - sections/section-040/module-01/course-01-key-files-passwords-and-imported-keys.md
+  prompt: The `.pub` file is lost but the private key file exists. What is the right
+    step?
+  options:
+  - id: a
+    text: Generate a new key pair and replace both files.
+    explanation: Not correct. Existing signatures would no longer verify with it.
+  - id: b
+    text: Verify with the private key instead.
+    explanation: Not correct. Verification uses the public key.
+  - id: c
+    text: Run `cosign public-key --key <file>.key` to export the public key again.
+    explanation: Correct. A new pair would break trust in existing signatures.
+  - id: d
+    text: Copy the public key from the signature bundle.
+    explanation: Not correct. The bundle holds only a hint.
+  correct_option: c
+  explanation: Correct. A new pair would break trust in existing signatures.
+- id: ats119-040-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Define a KMS key
+  source_readings:
+  - sections/section-040/module-01/course-02-keys-in-a-key-management-service.md
+  prompt: What is the main benefit of a key in a key management service (KMS)?
+  options:
+  - id: a
+    text: The key can be copied to any laptop.
+    explanation: Not correct. Not copying it is the point.
+  - id: b
+    text: Signatures are no longer needed.
+    explanation: Not correct. The KMS still produces signatures.
+  - id: c
+    text: Verifiers need a KMS token.
+    explanation: Not correct. Verifiers only need the public key.
+  - id: d
+    text: The private key is created inside the service and never leaves it. The signer
+      asks the service to sign.
+    explanation: Correct. There is no key file to copy.
+  correct_option: d
+  explanation: Correct. There is no key file to copy.
+- id: ats119-040-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use a KMS reference
+  source_readings:
+  - sections/section-040/module-01/course-02-keys-in-a-key-management-service.md
+  prompt: Which reference tells cosign to use a key named `cosign-demo` in OpenBao
+    Transit?
+  options:
+  - id: a
+    text: "`openbao://cosign-demo`"
+    explanation: Correct. `hashivault://` also works for Vault Transit.
+  - id: b
+    text: "`awskms://cosign-demo`"
+    explanation: Not correct. That is AWS Key Management Service.
+  - id: c
+    text: "`k8s://kms/cosign-demo`"
+    explanation: Not correct. That reads a key from a Kubernetes Secret.
+  - id: d
+    text: "`env://cosign-demo`"
+    explanation: Not correct. That reads a key from an environment variable.
+  correct_option: a
+  explanation: Correct. `hashivault://` also works for Vault Transit.
+- id: ats119-040-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Configure access to Transit
+  source_readings:
+  - sections/section-040/module-01/course-02-keys-in-a-key-management-service.md
+  prompt: Which variables let cosign reach OpenBao Transit in the workstation?
+  options:
+  - id: a
+    text: "`COSIGN_PASSWORD` for the token."
+    explanation: Not correct. That is the password of a key file.
+  - id: b
+    text: "`BAO_ADDR` for the address and `BAO_TOKEN` for the token."
+    explanation: Correct. The mount path comes from `TRANSIT_SECRET_ENGINE_PATH`,
+      default `transit`.
+  - id: c
+    text: "`REGISTRY` for the address."
+    explanation: Not correct. That holds the image registry.
+  - id: d
+    text: "`SC` for the token."
+    explanation: Not correct. That points at the signing configuration.
+  correct_option: b
+  explanation: Correct. The mount path comes from `TRANSIT_SECRET_ENGINE_PATH`, default
+    `transit`.
+- id: ats119-040-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Distribute only the public key
+  source_readings:
+  - sections/section-040/module-01/course-02-keys-in-a-key-management-service.md
+  prompt: What does a verifier need to check a release signed with a Transit key?
+  options:
+  - id: a
+    text: The OpenBao root token.
+    explanation: Not correct. Signing access stays with the signer.
+  - id: b
+    text: The Transit private key.
+    explanation: Not correct. It never leaves OpenBao.
+  - id: c
+    text: The exported public key file.
+    explanation: Correct. It needs no access to OpenBao.
+  - id: d
+    text: The `BAO_ADDR` variable only.
+    explanation: Not correct. That is not a key.
+  correct_option: c
+  explanation: Correct. It needs no access to OpenBao.
+- id: ats119-040-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read the signed payload
+  source_readings:
+  - sections/section-040/module-01/course-03-rotating-keys-and-the-signed-payload.md
+  prompt: Which fact does the signed payload from `cosign verify` contain?
+  options:
+  - id: a
+    text: The name of the signing key.
+    explanation: Not correct. Verify with each public key to find the signer.
+  - id: b
+    text: The private key password.
+    explanation: Not correct. It is never in the payload.
+  - id: c
+    text: The registry address token.
+    explanation: Not correct. No tokens are in the payload.
+  - id: d
+    text: The repository, the image digest and the annotations.
+    explanation: Correct. It does not name the key.
+  correct_option: d
+  explanation: Correct. It does not name the key.
+- id: ats119-040-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Plan a scheduled rotation
+  source_readings:
+  - sections/section-040/module-01/course-03-rotating-keys-and-the-signed-payload.md
+  prompt: Which steps fit a scheduled key rotation in this module?
+  options:
+  - id: a
+    text: Sign supported releases with the new key, keep the old signatures, skip
+      end-of-life releases and publish both public keys.
+    explanation: Correct. Users who trust only the old key keep working.
+  - id: b
+    text: Delete the old signatures first, then sign.
+    explanation: Not correct. Users who have not updated would start failing.
+  - id: c
+    text: Re-sign every release, including end-of-life ones.
+    explanation: Not correct. The new key should not vouch for them.
+  - id: d
+    text: Publish only the new public key.
+    explanation: Not correct. Users still need the old one during the change.
+  correct_option: a
+  explanation: Correct. Users who trust only the old key keep working.

@@ -1,0 +1,254 @@
+# Knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats119-010
+course_id: ATS119
+exam_code: SIGSTORE
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-010
+  title: Signing And Verifying Container Images
+placement:
+  position: after
+  reading: sections/section-010/capstone/labs/lab-01/question.md
+questions:
+- id: ats119-010-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain the roles of the two keys
+  source_readings:
+  - sections/section-010/module-01/course-01-key-pairs-and-signing-by-digest.md
+  prompt: Which key does cosign use to create a signature, and who may hold it?
+  options:
+  - id: a
+    text: The private key, held only by the person or system that signs.
+    explanation: Correct. The public key only checks signatures, so it can be shared.
+  - id: b
+    text: The public key, held by every verifier.
+    explanation: Not correct. The public key checks signatures. It cannot make them.
+  - id: c
+    text: The public key, held only by the signer.
+    explanation: Not correct. The public key is shared. It does not sign.
+  - id: d
+    text: Either key, because both are linked.
+    explanation: Not correct. Each key has one job.
+  correct_option: a
+  explanation: Correct. The public key only checks signatures, so it can be shared.
+- id: ats119-010-q02
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Choose what to sign
+  source_readings:
+  - sections/section-010/module-01/course-01-key-pairs-and-signing-by-digest.md
+  prompt: Why does the module sign `$REPO@$DIGEST` and not `$REPO:6.15.0`?
+  options:
+  - id: a
+    text: A digest is encrypted and a tag is not.
+    explanation: Not correct. A digest is a SHA-256 hash, not an encrypted value.
+  - id: b
+    text: A tag can be moved to another image, but a digest names one exact image.
+    explanation: Correct. The signature then covers exactly the image that was checked.
+  - id: c
+    text: cosign refuses to sign any tag.
+    explanation: Not correct. cosign signs a tag, resolves it and warns.
+  - id: d
+    text: A digest makes the image smaller in the registry.
+    explanation: Not correct. The digest does not change the image size.
+  correct_option: b
+  explanation: Correct. The signature then covers exactly the image that was checked.
+- id: ats119-010-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use the signing configuration
+  source_readings:
+  - sections/section-010/module-01/course-01-key-pairs-and-signing-by-digest.md
+  prompt: A lab signature must not go to the public Rekor log. What does the module
+    use with cosign v3.1.4?
+  options:
+  - id: a
+    text: The flag `--tlog-upload=false`.
+    explanation: Not correct. cosign v3.1.4 rejects it while a signing configuration
+      is in use.
+  - id: b
+    text: The flag `--insecure-ignore-tlog` on `cosign sign`.
+    explanation: Not correct. That flag belongs to verification, not to signing.
+  - id: c
+    text: A signing configuration file whose service lists are empty, passed with
+      `--signing-config`.
+    explanation: Correct. With no Rekor service listed, cosign uploads nothing to
+      a log.
+  - id: d
+    text: No flag, because cosign v3 never uses a log.
+    explanation: Not correct. Without a configuration, cosign v3 uses the public-good
+      services.
+  correct_option: c
+  explanation: Correct. With no Rekor service listed, cosign uploads nothing to a
+    log.
+- id: ats119-010-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Describe where cosign v3 stores a signature
+  source_readings:
+  - sections/section-010/module-01/course-02-where-signatures-live.md
+  prompt: Where does cosign v3 store the signature of an image?
+  options:
+  - id: a
+    text: On a separate signature server run by Sigstore.
+    explanation: Not correct. cosign keeps no separate signature server.
+  - id: b
+    text: In a file next to the private key.
+    explanation: Not correct. The private key file holds only the key.
+  - id: c
+    text: In the image layers, changing the image digest.
+    explanation: Not correct. The image is not changed, so its digest stays the same.
+  - id: d
+    text: In the same registry, as a Sigstore bundle attached to the image as an OCI
+      referrer.
+    explanation: Correct. The bundle manifest has a `subject` field that points at
+      the image.
+  correct_option: d
+  explanation: Correct. The bundle manifest has a `subject` field that points at the
+    image.
+- id: ats119-010-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find signatures in a registry
+  source_readings:
+  - sections/section-010/module-01/course-02-where-signatures-live.md
+  prompt: "`regctl tag ls` shows no `.sig` tag for a digest that was signed with cosign
+    v3. What does this mean?"
+  options:
+  - id: a
+    text: Nothing yet. cosign v3 stores bundles as referrers, so check with `cosign
+      tree` or `regctl artifact list`.
+    explanation: Correct. The `.sig` tag is the older layout.
+  - id: b
+    text: The image is unsigned.
+    explanation: Not correct. A v3 signature is a referrer and has no `.sig` tag.
+  - id: c
+    text: The registry deleted the signature.
+    explanation: Not correct. Nothing says it was deleted.
+  - id: d
+    text: The signature was made with the wrong key.
+    explanation: Not correct. The key does not decide which tags exist.
+  correct_option: a
+  explanation: Correct. The `.sig` tag is the older layout.
+- id: ats119-010-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Name the legacy signature layout
+  source_readings:
+  - sections/section-010/module-01/course-02-where-signatures-live.md
+  prompt: What did cosign v2 use to store a signature in the registry?
+  options:
+  - id: a
+    text: An OCI referrer with a `subject` field.
+    explanation: Not correct. That is the cosign v3 layout.
+  - id: b
+    text: An image with the tag `sha256-<hex>.sig`, built from the image digest.
+    explanation: Correct. Tools found the signature by computing that tag.
+  - id: c
+    text: A label inside the signed image.
+    explanation: Not correct. Labels would change the image.
+  - id: d
+    text: A key file in the repository.
+    explanation: Not correct. Key files are not signatures.
+  correct_option: b
+  explanation: Correct. Tools found the signature by computing that tag.
+- id: ats119-010-q07
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Verify an image with a public key
+  source_readings:
+  - sections/section-010/module-01/course-03-verifying-signatures-and-annotations.md
+  prompt: Which command checks the signatures of an image with the public key `release.pub`?
+  options:
+  - id: a
+    text: "`cosign verify --key release.key` with the image reference."
+    explanation: Not correct. `release.key` is the private key. Verification uses
+      the `.pub` file.
+  - id: b
+    text: "`cosign tree --key release.pub` with the image reference."
+    explanation: Not correct. `cosign tree` lists attached artifacts. It does not
+      verify.
+  - id: c
+    text: "`cosign verify --key release.pub` with the image reference."
+    explanation: Correct. It checks each attached signature with that key.
+  - id: d
+    text: "`cosign public-key --key release.pub` with the image reference."
+    explanation: Not correct. That command prints a public key.
+  correct_option: c
+  explanation: Correct. It checks each attached signature with that key.
+- id: ats119-010-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain annotations
+  source_readings:
+  - sections/section-010/module-01/course-03-verifying-signatures-and-annotations.md
+  prompt: What is an annotation added with `cosign sign -a`?
+  options:
+  - id: a
+    text: A tag added to the image in the registry.
+    explanation: Not correct. The image and its tags stay unchanged.
+  - id: b
+    text: A comment stored outside the signature.
+    explanation: Not correct. It is inside the signed payload.
+  - id: c
+    text: A label that only the registry can read.
+    explanation: Not correct. cosign reads it when it verifies.
+  - id: d
+    text: A key=value pair inside the signed payload, so a change breaks the signature.
+    explanation: Correct. Annotations appear in the `optional` part of the payload.
+  correct_option: d
+  explanation: Correct. Annotations appear in the `optional` part of the payload.
+- id: ats119-010-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use annotations as a filter
+  source_readings:
+  - sections/section-010/module-01/course-03-verifying-signatures-and-annotations.md
+  prompt: An image has one signature without annotations. `cosign verify` runs without
+    `-a`. What happens?
+  options:
+  - id: a
+    text: It passes, because any valid signature from the key is enough.
+    explanation: Correct. `-a` is a filter that is only applied when you give it.
+  - id: b
+    text: It fails, because the signature has no annotations.
+    explanation: Not correct. Without `-a` there is no annotation condition.
+  - id: c
+    text: It fails, because annotations are always required.
+    explanation: Not correct. They are required only when you ask with `-a`.
+  - id: d
+    text: It asks for a password.
+    explanation: Not correct. Verification uses the public key only.
+  correct_option: a
+  explanation: Correct. `-a` is a filter that is only applied when you give it.
+- id: ats119-010-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Predict the effect of a moved tag
+  source_readings:
+  - sections/section-010/module-01/course-03-verifying-signatures-and-annotations.md
+  prompt: Someone moves the tag `6.15.0` to the digest of the old release. What does
+    `cosign verify --key release.pub $REPO:6.15.0` do?
+  options:
+  - id: a
+    text: It passes, because the tag name is signed.
+    explanation: Not correct. The signature covers the digest, not the tag name.
+  - id: b
+    text: It fails. cosign resolves the tag to the old digest, and that digest has
+      no signature from the key.
+    explanation: Correct. The signature protects the digest and does not follow a
+      tag.
+  - id: c
+    text: It passes, because the signature moves with the tag.
+    explanation: Not correct. A signature stays on its digest.
+  - id: d
+    text: It signs the old digest automatically.
+    explanation: Not correct. Verification never signs.
+  correct_option: b
+  explanation: Correct. The signature protects the digest and does not follow a tag.

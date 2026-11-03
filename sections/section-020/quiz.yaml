@@ -1,0 +1,250 @@
+# Knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats119-020
+course_id: ATS119
+exam_code: SIGSTORE
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-020
+  title: Signing Blobs, Bundles And SBOMs
+placement:
+  position: after
+  reading: sections/section-020/capstone/labs/lab-01/question.md
+questions:
+- id: ats119-020-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Sign a file
+  source_readings:
+  - sections/section-020/module-01/course-01-signing-a-file-with-a-bundle.md
+  prompt: Which command signs a file of any kind and writes the result to a bundle?
+  options:
+  - id: a
+    text: "`cosign sign <file>`"
+    explanation: Not correct. `cosign sign` signs an image in a registry.
+  - id: b
+    text: "`cosign sign-blob --bundle <file>.sigstore.json <file>` with a key."
+    explanation: Correct. It hashes the file, signs the hash and writes the bundle.
+  - id: c
+    text: "`cosign attest --bundle <file>`"
+    explanation: Not correct. `cosign attest` attaches a signed statement to an image.
+  - id: d
+    text: "`cosign verify-blob --bundle <file>`"
+    explanation: Not correct. That command checks a bundle. It does not create one.
+  correct_option: b
+  explanation: Correct. It hashes the file, signs the hash and writes the bundle.
+- id: ats119-020-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Describe what a signature covers
+  source_readings:
+  - sections/section-020/module-01/course-01-signing-a-file-with-a-bundle.md
+  prompt: What does the signature in a blob bundle cover?
+  options:
+  - id: a
+    text: The file name only.
+    explanation: Not correct. Renaming the file does not matter. The content hash
+      does.
+  - id: b
+    text: The public key of the signer.
+    explanation: Not correct. The bundle holds only a hint about the key.
+  - id: c
+    text: The SHA-256 hash of the file.
+    explanation: Correct. Any change to the file gives a different hash.
+  - id: d
+    text: The registry where the file is stored.
+    explanation: Not correct. A blob signature has no registry.
+  correct_option: c
+  explanation: Correct. Any change to the file gives a different hash.
+- id: ats119-020-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read the bundle fields
+  source_readings:
+  - sections/section-020/module-01/course-01-signing-a-file-with-a-bundle.md
+  prompt: Which field of a blob bundle holds the hash algorithm and the hash of the
+    signed file?
+  options:
+  - id: a
+    text: "`verificationMaterial`"
+    explanation: Not correct. That field holds a hint about the public key.
+  - id: b
+    text: "`mediaType`"
+    explanation: Not correct. That field names the bundle format and version.
+  - id: c
+    text: "`messageSignature.signature`"
+    explanation: Not correct. That field holds the signature, not the file hash.
+  - id: d
+    text: "`messageSignature.messageDigest`"
+    explanation: Correct. `messageSignature.signature` holds the signature over that
+      hash.
+  correct_option: d
+  explanation: Correct. `messageSignature.signature` holds the signature over that
+    hash.
+- id: ats119-020-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Trust the public key
+  source_readings:
+  - sections/section-020/module-01/course-01-signing-a-file-with-a-bundle.md
+  prompt: The bundle contains only a hint about the key. Why does a verifier need
+    its own copy of the public key?
+  options:
+  - id: a
+    text: If the bundle carried its own key, anyone could sign anything and the check
+      would pass.
+    explanation: Correct. The verifier must get the key from a trusted place.
+  - id: b
+    text: Because the bundle is encrypted.
+    explanation: Not correct. The bundle is plain JSON.
+  - id: c
+    text: Because the hint is always wrong.
+    explanation: Not correct. The hint helps pick the key. It cannot prove trust.
+  - id: d
+    text: Because cosign cannot read JSON.
+    explanation: Not correct. cosign reads the bundle.
+  correct_option: a
+  explanation: Correct. The verifier must get the key from a trusted place.
+- id: ats119-020-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Predict a failed verification
+  source_readings:
+  - sections/section-020/module-01/course-01-signing-a-file-with-a-bundle.md
+  prompt: One byte is added to a signed archive. What does `cosign verify-blob` do
+    with the original bundle?
+  options:
+  - id: a
+    text: It passes, because one byte is too small to matter.
+    explanation: Not correct. Any change gives a different hash.
+  - id: b
+    text: It fails, because the changed file has a different hash.
+    explanation: Correct. The signature no longer matches that hash.
+  - id: c
+    text: It passes, because the bundle holds the file.
+    explanation: Not correct. The bundle holds a hash, not the file.
+  - id: d
+    text: It signs the new file.
+    explanation: Not correct. Verification never signs.
+  correct_option: b
+  explanation: Correct. The signature no longer matches that hash.
+- id: ats119-020-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use the tlog flag on blobs
+  source_readings:
+  - sections/section-020/module-01/course-01-signing-a-file-with-a-bundle.md
+  prompt: Why does `cosign verify-blob` in this module use `--insecure-ignore-tlog`?
+  options:
+  - id: a
+    text: The private key is not encrypted.
+    explanation: Not correct. The flag is not about key encryption.
+  - id: b
+    text: The bundle format has no signature.
+    explanation: Not correct. The bundle has a signature.
+  - id: c
+    text: The signature is in no transparency log, so there is no entry to look for.
+    explanation: Correct. The offline signing configuration lists no log.
+  - id: d
+    text: The archive is too large to hash.
+    explanation: Not correct. Size is not the reason.
+  correct_option: c
+  explanation: Correct. The offline signing configuration lists no log.
+- id: ats119-020-q07
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Define an SBOM
+  source_readings:
+  - sections/section-020/module-01/course-02-generating-and-signing-an-sbom.md
+  prompt: What is a software bill of materials (SBOM)?
+  options:
+  - id: a
+    text: A signature of an image.
+    explanation: Not correct. An SBOM is a list. A signature is separate.
+  - id: b
+    text: A list of the people who signed a release.
+    explanation: Not correct. An SBOM lists packages.
+  - id: c
+    text: A policy that decides who may deploy.
+    explanation: Not correct. A policy is a different object.
+  - id: d
+    text: A machine-readable list of the packages inside an artifact, with names and
+      versions.
+    explanation: Correct. SPDX and CycloneDX are two common formats.
+  correct_option: d
+  explanation: Correct. SPDX and CycloneDX are two common formats.
+- id: ats119-020-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Generate an SBOM
+  source_readings:
+  - sections/section-020/module-01/course-02-generating-and-signing-an-sbom.md
+  prompt: Which command writes an SPDX JSON SBOM of an image straight from the registry?
+  options:
+  - id: a
+    text: "`syft scan registry:<repo>@<digest> -o spdx-json=<file>`"
+    explanation: Correct. The `registry:` prefix tells syft to read from the registry.
+  - id: b
+    text: "`cosign sign-blob registry:<repo>@<digest>`"
+    explanation: Not correct. That command signs. It does not list packages.
+  - id: c
+    text: "`regctl image digest <repo>:<tag>`"
+    explanation: Not correct. That prints a digest.
+  - id: d
+    text: "`jq .packages <repo>@<digest>`"
+    explanation: Not correct. `jq` reads JSON files and cannot scan an image.
+  correct_option: a
+  explanation: Correct. The `registry:` prefix tells syft to read from the registry.
+- id: ats119-020-q09
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Scan the digest
+  source_readings:
+  - sections/section-020/module-01/course-02-generating-and-signing-an-sbom.md
+  prompt: Why does the module scan the image digest and not the tag?
+  options:
+  - id: a
+    text: syft cannot read tags.
+    explanation: Not correct. The reason is accuracy, not a syft limit.
+  - id: b
+    text: The SBOM then describes exactly the image that is signed, even if the tag
+      moves.
+    explanation: Correct. A tag could point at a different image later.
+  - id: c
+    text: A digest scan is faster.
+    explanation: Not correct. Speed is not the reason.
+  - id: d
+    text: Tags are not allowed in SPDX.
+    explanation: Not correct. SPDX does not forbid tags.
+  correct_option: b
+  explanation: Correct. A tag could point at a different image later.
+- id: ats119-020-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Limit of a signed SBOM file
+  source_readings:
+  - sections/section-020/module-01/course-02-generating-and-signing-an-sbom.md
+  prompt: A signed SBOM file verifies. What does that prove, and what does it not
+    prove?
+  options:
+  - id: a
+    text: It proves the SBOM lists every package in the image.
+    explanation: Not correct. syft lists only what it recognizes, and a signature
+      does not check content.
+  - id: b
+    text: It proves the SBOM belongs to one digest.
+    explanation: Not correct. The file holds no signed link to an image.
+  - id: c
+    text: It proves who produced the file. It does not tie the file to an image, except
+      through the file name.
+    explanation: Correct. An attestation with the digest inside is the stronger link.
+  - id: d
+    text: It proves nothing, because anyone can sign.
+    explanation: Not correct. Only the holder of the private key can make a valid
+      signature.
+  correct_option: c
+  explanation: Correct. An attestation with the digest inside is the stronger link.

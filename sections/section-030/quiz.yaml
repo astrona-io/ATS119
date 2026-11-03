@@ -1,0 +1,249 @@
+# Knowledge check for section 030. Listed in astrona.yaml as a `type: quiz` entry after the capstone lab.
+schema_version: 1
+kind: question_bank
+id: ats119-030
+course_id: ATS119
+exam_code: SIGSTORE
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-030
+  title: Attestations And Policies
+placement:
+  position: after
+  reading: sections/section-030/capstone/labs/lab-01/question.md
+questions:
+- id: ats119-030-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Name the parts of a statement
+  source_readings:
+  - sections/section-030/module-01/course-01-in-toto-statements-and-predicate-types.md
+  prompt: Which three fields make up the main content of an in-toto statement?
+  options:
+  - id: a
+    text: "`subject`, `bundle` and `signature`"
+    explanation: Not correct. The signature is on the envelope, not a statement field.
+  - id: b
+    text: "`image`, `tag` and `policy`"
+    explanation: Not correct. These are not statement fields.
+  - id: c
+    text: "`subject`, `predicateType` and `predicate`"
+    explanation: Correct. They say what it is about, what kind of fact it is and the
+      fact itself.
+  - id: d
+    text: "`builder`, `scanner` and `digest`"
+    explanation: Not correct. These appear inside predicates.
+  correct_option: c
+  explanation: Correct. They say what it is about, what kind of fact it is and the
+    fact itself.
+- id: ats119-030-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know who fills the subject
+  source_readings:
+  - sections/section-030/module-01/course-01-in-toto-statements-and-predicate-types.md
+  prompt: Who puts the image digest into the `subject` of the statement when you run
+    `cosign attest`?
+  options:
+  - id: a
+    text: You do, inside the predicate file.
+    explanation: Not correct. cosign builds the subject.
+  - id: b
+    text: The registry, when it stores the attestation.
+    explanation: Not correct. The registry stores what cosign pushes.
+  - id: c
+    text: The scanner, when it writes the report.
+    explanation: Not correct. The scanner does not know the attested image reference.
+  - id: d
+    text: cosign does, from the image reference you give.
+    explanation: Correct. The predicate file holds only the predicate.
+  correct_option: d
+  explanation: Correct. The predicate file holds only the predicate.
+- id: ats119-030-q03
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Choose a predicate type
+  source_readings:
+  - sections/section-030/module-01/course-01-in-toto-statements-and-predicate-types.md
+  prompt: Which `--type` value attests a SLSA provenance version 1 predicate?
+  options:
+  - id: a
+    text: "`slsaprovenance1`"
+    explanation: Correct. It sets the SLSA provenance version 1 predicate type.
+  - id: b
+    text: "`slsaprovenance`"
+    explanation: Not correct. That name means the older version 0.2.
+  - id: c
+    text: "`vuln`"
+    explanation: Not correct. That type is for scan results.
+  - id: d
+    text: "`custom`"
+    explanation: Not correct. A verifier asking for provenance would not find it.
+  correct_option: a
+  explanation: Correct. It sets the SLSA provenance version 1 predicate type.
+- id: ats119-030-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Pick the right type for a scan
+  source_readings:
+  - sections/section-030/module-01/course-01-in-toto-statements-and-predicate-types.md
+  prompt: A scan result is attested with `--type custom`. What goes wrong at verification?
+  options:
+  - id: a
+    text: Nothing, because all types are the same.
+    explanation: Not correct. The `predicateType` URI differs.
+  - id: b
+    text: "`cosign verify-attestation --type vuln` does not find it, because the `predicateType`
+      differs."
+    explanation: Correct. Verifiers and policies look for one predicate type.
+  - id: c
+    text: The signature becomes invalid.
+    explanation: Not correct. The signature is valid. The type is wrong.
+  - id: d
+    text: cosign deletes the attestation.
+    explanation: Not correct. cosign does not delete it.
+  correct_option: b
+  explanation: Correct. Verifiers and policies look for one predicate type.
+- id: ats119-030-q05
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Attach an attestation
+  source_readings:
+  - sections/section-030/module-01/course-02-attesting-provenance-and-scan-results.md
+  prompt: Which command signs a predicate file and attaches it to an image digest?
+  options:
+  - id: a
+    text: "`cosign sign-blob --predicate <file>`"
+    explanation: Not correct. `sign-blob` signs a file into a bundle.
+  - id: b
+    text: "`cosign verify-attestation --predicate <file>`"
+    explanation: Not correct. That command checks attestations.
+  - id: c
+    text: "`cosign attest --key release.key --type <type> --predicate <file> <repo>@<digest>`"
+    explanation: Correct. cosign wraps the predicate in a statement and signs it.
+  - id: d
+    text: "`regctl artifact put <file>`"
+    explanation: Not correct. That pushes an artifact without a signed statement.
+  correct_option: c
+  explanation: Correct. cosign wraps the predicate in a statement and signs it.
+- id: ats119-030-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read a verified attestation
+  source_readings:
+  - sections/section-030/module-01/course-02-attesting-provenance-and-scan-results.md
+  prompt: The output of `cosign verify-attestation` has a `payload` field. How do
+    you read the statement?
+  options:
+  - id: a
+    text: Open `payload` directly, because it is plain JSON.
+    explanation: Not correct. It is base64-encoded.
+  - id: b
+    text: Run `cosign tree` on the payload.
+    explanation: Not correct. `cosign tree` works on images.
+  - id: c
+    text: Decrypt it with the private key.
+    explanation: Not correct. It is encoded, not encrypted.
+  - id: d
+    text: Decode the base64 value of `payload` and read the JSON.
+    explanation: Correct. For example, `base64 -d | jq`.
+  correct_option: d
+  explanation: Correct. For example, `base64 -d | jq`.
+- id: ats119-030-q07
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Limit of verification
+  source_readings:
+  - sections/section-030/module-01/course-02-attesting-provenance-and-scan-results.md
+  prompt: A scan attestation with several critical findings is verified with the release
+    public key. What happens?
+  options:
+  - id: a
+    text: It verifies, because verification checks the signer and the digest, not
+      the content.
+    explanation: Correct. A policy is needed to judge the content.
+  - id: b
+    text: It fails, because critical findings invalidate the signature.
+    explanation: Not correct. Findings do not affect a signature.
+  - id: c
+    text: It fails, because `vuln` attestations must be clean.
+    explanation: Not correct. cosign does not judge the content.
+  - id: d
+    text: It is removed from the registry.
+    explanation: Not correct. Verification does not remove anything.
+  correct_option: a
+  explanation: Correct. A policy is needed to judge the content.
+- id: ats119-030-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know the Rego contract
+  source_readings:
+  - sections/section-030/module-01/course-03-checking-attestations-with-a-policy.md
+  prompt: Which package name and rule does cosign v3.1.4 evaluate in a Rego policy?
+  options:
+  - id: a
+    text: "`package policy` and the rule `deny`"
+    explanation: Not correct. cosign asks for `data.signature.allow`.
+  - id: b
+    text: "`package signature` and the rule `allow`"
+    explanation: Correct. The input is the verified in-toto statement.
+  - id: c
+    text: "`package cosign` and the rule `verify`"
+    explanation: Not correct. These names are not used.
+  - id: d
+    text: "`package main` and the rule `result`"
+    explanation: Not correct. cosign does not evaluate these.
+  correct_option: b
+  explanation: Correct. The input is the verified in-toto statement.
+- id: ats119-030-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Apply a policy to all attestations
+  source_readings:
+  - sections/section-030/module-01/course-03-checking-attestations-with-a-policy.md
+  prompt: An image has an old scan with critical findings and a new clean scan. The
+    scan policy denies critical findings. What does `verify-attestation --type vuln
+    --policy` do?
+  options:
+  - id: a
+    text: It passes, because the newest attestation wins.
+    explanation: Not correct. cosign does not rank attestations.
+  - id: b
+    text: It passes, because one passing attestation is enough.
+    explanation: Not correct. Every attestation of the type must pass.
+  - id: c
+    text: It fails, because every attestation of the type must pass and the old scan
+      does not.
+    explanation: Correct. cosign does not choose the newest one.
+  - id: d
+    text: It deletes the old scan and passes.
+    explanation: Not correct. cosign never deletes attestations.
+  correct_option: c
+  explanation: Correct. cosign does not choose the newest one.
+- id: ats119-030-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Remove stale attestations
+  source_readings:
+  - sections/section-030/module-01/course-03-checking-attestations-with-a-policy.md
+  prompt: Why does the module delete referrers with `regctl manifest delete --referrers`?
+  options:
+  - id: a
+    text: "`regctl` is the only tool that can verify attestations."
+    explanation: Not correct. cosign verifies attestations.
+  - id: b
+    text: The flag deletes the image as well.
+    explanation: Not correct. The image stays.
+  - id: c
+    text: The flag signs the remaining referrers.
+    explanation: Not correct. It only deletes.
+  - id: d
+    text: The flag also removes the manifest from the referrers list kept for the
+      digest. Without it, the list still names it.
+    explanation: Correct. `cosign clean` ignores `--allow-http-registry` in cosign
+      3.1.4.
+  correct_option: d
+  explanation: Correct. `cosign clean` ignores `--allow-http-registry` in cosign 3.1.4.
