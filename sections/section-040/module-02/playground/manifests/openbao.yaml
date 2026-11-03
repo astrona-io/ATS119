@@ -1,0 +1,50 @@
+# OpenBao 2.7.1 in development mode: in memory, already unsealed, root
+# token `root`. Lab-only: a development server loses every key when the pod
+# restarts and must never hold real keys. cosign reaches it as
+# http://openbao.kms:8200 through its hashivault/openbao KMS provider.
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kms
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: openbao
+  namespace: kms
+  labels:
+    app: openbao
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: openbao
+  template:
+    metadata:
+      labels:
+        app: openbao
+    spec:
+      containers:
+        - name: openbao
+          image: quay.io/openbao/openbao:2.7.1
+          command: ["bao", "server", "-dev", "-dev-root-token-id=root", "-dev-listen-address=0.0.0.0:8200"]
+          ports:
+            - name: http
+              containerPort: 8200
+          readinessProbe:
+            httpGet:
+              path: /v1/sys/health
+              port: http
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: openbao
+  namespace: kms
+spec:
+  selector:
+    app: openbao
+  ports:
+    - name: http
+      port: 8200
+      targetPort: http

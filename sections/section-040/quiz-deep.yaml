@@ -1,0 +1,238 @@
+# Deeper knowledge check for section 040. Listed in astrona.yaml as a `type: quiz` entry.
+schema_version: 1
+kind: question_bank
+id: ats119-040-deep
+course_id: ATS119
+exam_code: SIGSTORE
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-040-deep
+  title: Key Management In Depth
+placement:
+  position: after
+  reading: sections/section-040/capstone/labs/lab-01/question.md
+questions:
+- id: ats119-040d-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know import-key-pair
+  source_readings:
+  - sections/section-040/module-02/course-02-importing-an-existing-pem-key.md
+  prompt: Which command turns an existing PEM key into a cosign key pair?
+  options:
+  - id: a
+    text: "`cosign generate-key-pair`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: "`cosign public-key`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: "`cosign tree`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: "`cosign import-key-pair`."
+    explanation: Correct. It reads the key and protects it with a password.
+  correct_option: d
+  explanation: Correct. It reads the key and protects it with a password.
+- id: ats119-040d-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Change a password
+  source_readings:
+  - sections/section-040/module-02/course-03-changing-a-key-password.md
+  prompt: How is the password of a key file changed?
+  options:
+  - id: a
+    text: Edit the file with a text editor.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: Run `cosign verify`.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: Import the key again with a new password.
+    explanation: Correct. The new key file has the same key and new protection.
+  - id: d
+    text: Delete the public key.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: c
+  explanation: Correct. The new key file has the same key and new protection.
+- id: ats119-040d-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Keep identity
+  source_readings:
+  - sections/section-040/module-02/course-04-proving-the-identity-survived.md
+  prompt: After re-protecting a key, why do old signatures still verify?
+  options:
+  - id: a
+    text: The registry keeps a copy.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: The public key is the same.
+    explanation: Correct. Verification uses the public key only.
+  - id: c
+    text: The password is the same.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: The tag is the same.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: b
+  explanation: Correct. Verification uses the public key only.
+- id: ats119-040d-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know Transit
+  source_readings:
+  - sections/section-040/module-03/course-01-keys-in-the-transit-engine.md
+  prompt: Which OpenBao engine holds the signing keys in the lab?
+  options:
+  - id: a
+    text: Transit.
+    explanation: Correct. cosign reaches it through an `openbao://NAME` reference.
+  - id: b
+    text: KV.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: PKI.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: SSH.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: a
+  explanation: Correct. cosign reaches it through an `openbao://NAME` reference.
+- id: ats119-040d-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Export a public key
+  source_readings:
+  - sections/section-040/module-03/course-02-exporting-and-using-the-public-key.md
+  prompt: How does a verifier get the public key of a KMS key?
+  options:
+  - id: a
+    text: "`cosign import-key-pair`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: "`cosign clean`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: "`regctl artifact get`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: "`cosign public-key --key openbao://NAME`."
+    explanation: Correct. The private key never leaves the KMS.
+  correct_option: d
+  explanation: Correct. The private key never leaves the KMS.
+- id: ats119-040d-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find the signer
+  source_readings:
+  - sections/section-040/module-03/course-03-finding-out-which-key-signed.md
+  prompt: How do you find out which key signed a release?
+  options:
+  - id: a
+    text: Read the tag name.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: Check the file date.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: Verify with each known public key and note which one succeeds.
+    explanation: Correct. Only the matching key verifies.
+  - id: d
+    text: Run `cosign sign` again.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: c
+  explanation: Correct. Only the matching key verifies.
+- id: ats119-040d-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Control signing
+  source_readings:
+  - sections/section-040/module-03/course-04-controlling-who-may-sign.md
+  prompt: Where is the right to sign controlled for a Transit key?
+  options:
+  - id: a
+    text: In the image tag.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: In the OpenBao policy that allows the sign path.
+    explanation: Correct. Policy decides who can call the sign endpoint.
+  - id: c
+    text: In the registry.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: In the public key file.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: b
+  explanation: Correct. Policy decides who can call the sign endpoint.
+- id: ats119-040d-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Plan a rotation
+  source_readings:
+  - sections/section-040/module-01/course-04-planning-a-key-rotation.md
+  prompt: Why publish the new public key before signing with the new key?
+  options:
+  - id: a
+    text: Consumers need it to verify the new releases.
+    explanation: Correct. The overlap period lets consumers hold both keys.
+  - id: b
+    text: It saves disk space.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: The registry requires it.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: It resets old signatures.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: a
+  explanation: Correct. The overlap period lets consumers hold both keys.
+- id: ats119-040d-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Handle a compromise
+  source_readings:
+  - sections/section-040/module-01/course-04-planning-a-key-rotation.md
+  prompt: A key may have leaked. What is the right step for the trust set?
+  options:
+  - id: a
+    text: Keep it until the next year.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: Rename it.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: Do nothing; signatures stay valid.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: Remove the old public key at once and re-sign supported releases.
+    explanation: Correct. A compromised key must leave the trust set.
+  correct_option: d
+  explanation: Correct. A compromised key must leave the trust set.
+- id: ats119-040d-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Avoid key files
+  source_readings:
+  - sections/section-040/module-03/course-04-controlling-who-may-sign.md
+  prompt: What is the benefit of removing the file-based private key after moving
+    to KMS?
+  options:
+  - id: a
+    text: Signatures become smaller.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: Verification gets faster.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: No signing key is left on disk to copy.
+    explanation: Correct. Only the KMS can sign.
+  - id: d
+    text: The public key changes.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: c
+  explanation: Correct. Only the KMS can sign.

@@ -1,0 +1,248 @@
+# Deeper knowledge check for section 010. Listed in astrona.yaml as a `type: quiz` entry.
+schema_version: 1
+kind: question_bank
+id: ats119-010-deep
+course_id: ATS119
+exam_code: SIGSTORE
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-010-deep
+  title: Image Signing In Depth
+placement:
+  position: after
+  reading: sections/section-010/capstone/labs/lab-01/question.md
+questions:
+- id: ats119-010d-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain what an annotation does
+  source_readings:
+  - sections/section-010/module-02/course-01-annotations-in-the-signed-payload.md
+  prompt: Where does cosign put an annotation given with `-a env=production`?
+  options:
+  - id: a
+    text: Into the payload that is signed, under `optional`.
+    explanation: Correct. The signature covers the annotation, so it cannot be changed
+      afterwards.
+  - id: b
+    text: Into a file next to the key.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: Into the image layers.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: Into the registry tag name.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: a
+  explanation: Correct. The signature covers the annotation, so it cannot be changed
+    afterwards.
+- id: ats119-010d-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Describe verify -a
+  source_readings:
+  - sections/section-010/module-02/course-03-requiring-annotations-when-verifying.md
+  prompt: What does `cosign verify -a env=production` do with a signature that has
+    `env=staging`?
+  options:
+  - id: a
+    text: It rewrites the annotation.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: It accepts it and prints a warning.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: It signs again with the new value.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: It does not accept that signature for the check.
+    explanation: Correct. The `-a` flag is an exact-match filter on the signed annotations.
+  correct_option: d
+  explanation: Correct. The `-a` flag is an exact-match filter on the signed annotations.
+- id: ats119-010d-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Understand annotation scope
+  source_readings:
+  - sections/section-010/module-02/course-03-requiring-annotations-when-verifying.md
+  prompt: A digest has one signature with `env=production` and another with `approved-by=team`.
+    What happens with `verify -a env=production -a approved-by=team`?
+  options:
+  - id: a
+    text: It passes, because each annotation is on some signature.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: It passes only with `--insecure-ignore-tlog`.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: It fails, because all annotations must be on one signature.
+    explanation: Correct. Annotations are matched per signature, not across signatures.
+  - id: d
+    text: It signs the missing annotation.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: c
+  explanation: Correct. Annotations are matched per signature, not across signatures.
+- id: ats119-010d-q04
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know that several signatures can exist
+  source_readings:
+  - sections/section-010/module-02/course-02-several-signatures-on-one-digest.md
+  prompt: Can one image digest have more than one signature?
+  options:
+  - id: a
+    text: No, a second signature replaces the first.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: Yes, each signature is a separate referrer of the digest.
+    explanation: Correct. Signing again adds a signature and keeps the existing one.
+  - id: c
+    text: Only if the keys have the same password.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: Only on registries with HTTPS.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: b
+  explanation: Correct. Signing again adds a signature and keeps the existing one.
+- id: ats119-010d-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use stage signatures
+  source_readings:
+  - sections/section-010/module-02/course-04-a-promotion-flow-with-stage-signatures.md
+  prompt: Why does the older release stay unapproved in a promotion flow?
+  options:
+  - id: a
+    text: Only the digest that received the production signature is approved.
+    explanation: Correct. Approval belongs to one digest, not to a repository or a
+      tag name.
+  - id: b
+    text: Old tags are deleted automatically.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: The staging signature covers all tags.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: The registry blocks old digests.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: a
+  explanation: Correct. Approval belongs to one digest, not to a repository or a tag
+    name.
+- id: ats119-010d-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know referrers
+  source_readings:
+  - sections/section-010/module-03/course-01-referrers-and-the-subject-field.md
+  prompt: What does the `subject` field in a signature manifest hold?
+  options:
+  - id: a
+    text: The password of the key.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: The tag of the image.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: The URL of the public key.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: The digest of the image the signature belongs to.
+    explanation: Correct. The subject links the signature manifest to the image, so
+      registries can list it as a referrer.
+  correct_option: d
+  explanation: Correct. The subject links the signature manifest to the image, so
+    registries can list it as a referrer.
+- id: ats119-010d-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know the fallback tag
+  source_readings:
+  - sections/section-010/module-03/course-02-the-fallback-tag.md
+  prompt: The lab registry has no referrers API. How does cosign find signatures there?
+  options:
+  - id: a
+    text: Through a file in /etc/cosign.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: Through the image labels.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: Through a tag named `sha256-` followed by the hex digest.
+    explanation: Correct. The fallback tag is an index that lists the referrers of
+      the digest.
+  - id: d
+    text: Through a DNS record.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: c
+  explanation: Correct. The fallback tag is an index that lists the referrers of the
+    digest.
+- id: ats119-010d-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Find unsigned images
+  source_readings:
+  - sections/section-010/module-03/course-03-finding-unsigned-images.md
+  prompt: Which approach finds tags that have no signature?
+  options:
+  - id: a
+    text: List the tags and compare their names.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: List the tags and check the referrers of each digest.
+    explanation: Correct. A tag is unsigned when its digest has no signature referrer.
+  - id: c
+    text: Run `cosign clean`.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: Check the size of each image.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: b
+  explanation: Correct. A tag is unsigned when its digest has no signature referrer.
+- id: ats119-010d-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Know a tool limit
+  source_readings:
+  - sections/section-010/module-03/course-04-several-keys-and-retiring-signatures.md
+  prompt: "`cosign clean` is run against the plain-HTTP lab registry. What is true?"
+  options:
+  - id: a
+    text: It ignores `--allow-http-registry`, so `regctl` is used to remove referrers.
+    explanation: Correct. Use `regctl manifest delete --referrers` for the lab registry.
+  - id: b
+    text: It deletes the images too.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: It asks for the key password.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: It needs `--insecure-ignore-tlog`.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: a
+  explanation: Correct. Use `regctl manifest delete --referrers` for the lab registry.
+- id: ats119-010d-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Troubleshoot a failure
+  source_readings:
+  - sections/section-010/module-01/course-04-troubleshooting-signing-and-verification.md
+  prompt: "`cosign verify` fails for the release key. What is the first check to tell
+    an unsigned image from a signature by another key?"
+  options:
+  - id: a
+    text: Reinstall cosign.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: Delete the tag and push again.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: Change `COSIGN_PASSWORD`.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: Run `cosign tree` on the digest and look at the signatures listed.
+    explanation: Correct. The tree shows whether signatures exist at all.
+  correct_option: d
+  explanation: Correct. The tree shows whether signatures exist at all.

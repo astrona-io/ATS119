@@ -2,7 +2,7 @@
 
 Before a cluster runs an image, an operator may want to know more than "it is signed". Was it built by the release pipeline, from a tagged commit? Did the vulnerability scan pass? Each answer is a fact about the image, and an **attestation** carries such a fact as a signed statement attached to the image. Keep one sentence in mind: **an attestation is an in-toto statement about a digest, signed and stored next to the image, and a policy decides whether its content is good enough.**
 
-The module has three parts. **In-Toto Statements And Predicate Types** explains the statement format and the predicate types cosign supports. **Attesting Provenance And Scan Results** attaches a SLSA provenance predicate and a vulnerability scan to the release and reads them back. **Checking Attestations With A Policy** writes Rego policies that `cosign verify-attestation` evaluates. A graded lab follows the second part.
+The module has four parts. **In-Toto Statements And Predicate Types** explains the statement format and the predicate types cosign supports. **Attesting Provenance And Scan Results** attaches a SLSA provenance predicate and a vulnerability scan to the release and reads them back. **Checking Attestations With A Policy** writes Rego policies that `cosign verify-attestation` evaluates. **Building A Release Gate From Attestations** combines several attestation types and a policy into one check. A graded lab follows the second part.
 
 ## Learning objectives
 
@@ -13,6 +13,7 @@ After this module you can:
 - Attach an attestation with `cosign attest` and verify it with `cosign verify-attestation --type`.
 - Decode the statement inside an attestation and read its predicate.
 - Write a Rego policy for `cosign verify-attestation --policy`, and explain why one bad attestation makes the check fail.
+- Combine several attestation types and a policy into one release gate.
 
 ## Before you start
 

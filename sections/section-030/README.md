@@ -12,7 +12,7 @@ A signature says "this key holder approved this image". It does not say how the 
 
 ## The learning path
 
-The section has one module, with a landing page, three short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground.
+The section has three modules. The first has a landing page, four short parts, a graded lab right after the part it tests, and a summary. Modules 2 and 3 each have a landing page, four parts, a graded lab and a summary. Every landing page starts the module's playground.
 
 ### 1. Attach Attestations To Images
 
@@ -21,7 +21,28 @@ The playground holds the registry with the `podinfo` images, the workstation, an
 1. In-Toto Statements And Predicate Types
 2. Attesting Provenance And Scan Results, followed by the lab **Attach Provenance And Vulnerability Attestations**
 3. Checking Attestations With A Policy
-4. Summary
+4. Building A Release Gate From Attestations
+5. Summary
+
+### 2. SBOM And Custom Attestations On Images
+
+Each part ends in a step you run in the module's playground, and the graded lab **Attach An SBOM And A Review Attestation** follows the fourth part.
+
+1. Generating An SBOM With Syft
+2. Attaching An SBOM As An Attestation
+3. Custom Predicate Types
+4. Reading Attestations In Scripts
+5. Summary
+
+### 3. Rego Policies For Attestation Content
+
+Each part ends in a step you run in the module's playground, and the graded lab **Require A Trusted SBOM Tool With A Rego Policy** follows the fourth part.
+
+1. How Cosign Evaluates A Policy
+2. Running And Testing A Policy
+3. Rules On SBOM Content
+4. CUE And Policies In A Release Process
+5. Summary
 
 ## Section capstone: Gate A Release On Its Attestations
 

@@ -4,7 +4,7 @@ An image tag such as `podinfo:6.15.0` is only a name. Anyone who can push to the
 
 `cosign` is the Sigstore command-line tool that signs and verifies container images. In this module you use it with a **key pair**: a private key that signs and a public key that verifies. Keep one sentence in mind: **you sign a digest, you verify with a public key, and the signature lives next to the image in the registry.**
 
-The module has three parts. **Key Pairs And Signing An Image By Digest** creates a key pair and signs the current release by its digest, with a signing configuration that keeps the signature out of any public log. **Where The Signature Lives In The Registry** finds the signature in the registry and explains the Sigstore bundle cosign v3 stores there. **Verifying Signatures And Annotations** checks the signature with the public key, adds annotations, and shows what a verifier sees when the image changes. A graded lab follows the third part.
+The module has four parts. **Key Pairs And Signing An Image By Digest** creates a key pair and signs the current release by its digest, with a signing configuration that keeps the signature out of any public log. **Where The Signature Lives In The Registry** finds the signature in the registry and explains the Sigstore bundle cosign v3 stores there. **Verifying Signatures And Annotations** checks the signature with the public key, adds annotations, and shows what a verifier sees when the image changes. **Troubleshooting Signing And Verification** reproduces the most common failures and names the cause of each. A graded lab follows the third part.
 
 ## Learning objectives
 
@@ -16,6 +16,7 @@ After this module you can:
 - Find a signature in the registry with `cosign tree` and `regctl`.
 - Verify a signature with `cosign verify --key` and check its annotations.
 - Explain why `--insecure-ignore-tlog` is needed here and what it gives up.
+- Find the cause of the most common signing and verification failures.
 
 ## Before you start
 

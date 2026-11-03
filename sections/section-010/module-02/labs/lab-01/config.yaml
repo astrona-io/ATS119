@@ -1,0 +1,57 @@
+# Add A Production Signature With Annotations
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-119-lab-010-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-tools"
+      description: "Starts the registry and the workstation with cosign v3.1.4 and syft v1.55.0, and copies the example images"
+      type: "file"
+      source: "bootstrap/01-install-tools.sh"
+    - name: "ats-119-lab-010-02-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Registry and workstation (namespaces registry and workstation)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-workstation"
+      description: "Waits until the workstation has its tools and the registry answers"
+      type: "file"
+      source: "testing/wait-for-workstation.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-production-signature"
+      description: "Confirms the 6.15.0 digest has a signature with env=production and approved-by=release-team"
+      type: "file"
+      source: "validation/validate-production-signature.sh"
+    - name: "validate-staging-kept"
+      description: "Confirms the staging signature on 6.15.0 is still there"
+      type: "file"
+      source: "validation/validate-staging-kept.sh"
+    - name: "validate-old-release-not-production"
+      description: "Confirms 6.14.1 has no production signature"
+      type: "file"
+      source: "validation/validate-old-release-not-production.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - alpine:3.22
+      - registry:3.1.2

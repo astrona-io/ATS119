@@ -10,9 +10,8 @@ which is **20% of the path**. Written for **cosign v3.1.4**.
 > `CLAUDE.md` for the ranked list of things to check first.
 
 The course opens with an Introduction in `sections/intro/` (welcome, machine
-setup, how the course is made). Each section has one module (a landing page,
-short parts, a summary, a playground and a graded lab placed right after the
-part it tests) and a capstone.
+setup, how the course is made). Each section has three modules (a landing page,
+short parts, a summary, a playground and a graded lab) and a capstone.
 
 ---
 
@@ -20,10 +19,10 @@ part it tests) and a capstone.
 
 | Section | Title | Labs | Topic |
 | --- | --- | --- | --- |
-| [010](sections/section-010) | Signing And Verifying Container Images | 1 + capstone | image-signing |
-| [020](sections/section-020) | Signing Blobs, Bundles And SBOMs | 1 + capstone | blob-signing |
-| [030](sections/section-030) | Attestations And Policies | 1 + capstone | attestations |
-| [040](sections/section-040) | Managing Signing Keys | 1 + capstone | key-management |
+| [010](sections/section-010) | Signing And Verifying Container Images | 3 + capstone | image-signing |
+| [020](sections/section-020) | Signing Blobs, Bundles And SBOMs | 3 + capstone | blob-signing |
+| [030](sections/section-030) | Attestations And Policies | 3 + capstone | attestations |
+| [040](sections/section-040) | Managing Signing Keys | 3 + capstone | key-management |
 
 ## Labs and capstones
 

@@ -13,7 +13,7 @@ Every signature in this course is only as trustworthy as the key behind it. A le
 
 ## The learning path
 
-The section has one module, with a landing page, three short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground.
+The section has three modules. The first has a landing page, four short parts, a graded lab right after the part it tests, and a summary. Modules 2 and 3 each have a landing page, four parts, a graded lab and a summary. Every landing page starts the module's playground.
 
 ### 1. Manage Signing Keys
 
@@ -22,7 +22,28 @@ The playground holds the registry with the `podinfo` images, the workstation, an
 1. Key Files, Passwords And Imported Keys
 2. Keys In A Key Management Service
 3. Rotating Keys And Reading The Signed Payload, followed by the lab **Rotate The Release Signing Key**
-4. Summary
+4. Planning A Key Rotation
+5. Summary
+
+### 2. Importing Keys And Changing Their Passwords
+
+Each part ends in a step you run in the module's playground, and the graded lab **Import A Legacy PEM Key And Re-Protect It** follows the fourth part.
+
+1. Key Files And Passwords
+2. Importing An Existing PEM Key
+3. Changing A Key Password
+4. Proving The Identity Survived
+5. Summary
+
+### 3. Auditing And Controlling KMS Keys
+
+Each part ends in a step you run in the module's playground, and the graded lab **Find Out Which KMS Key Signed Which Release** follows the fourth part.
+
+1. Keys In The Transit Engine
+2. Exporting And Using The Public Key
+3. Finding Out Which Key Signed
+4. Controlling Who May Sign
+5. Summary
 
 ## Section capstone: Move Release Signing Into OpenBao Transit
 

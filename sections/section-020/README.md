@@ -12,7 +12,7 @@ Not everything you ship is a container image. Release archives, binaries, checks
 
 ## The learning path
 
-The section has one module, with a landing page, two short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground.
+The section has three modules. The first has a landing page, three short parts, a graded lab right after the part it tests, and a summary. Modules 2 and 3 each have a landing page, four parts, a graded lab and a summary. Every landing page starts the module's playground.
 
 ### 1. Sign Files And SBOMs With Bundles
 
@@ -20,7 +20,28 @@ The playground holds the registry with the `podinfo` images and the workstation 
 
 1. Signing A File With A Bundle
 2. Generating And Signing An SBOM, followed by the lab **Sign A Release Archive And Its SBOM**
-3. Summary
+3. Getting The Public Key To Consumers
+4. Summary
+
+### 2. Verifying Blob Bundles And Downloads
+
+Each part ends in a step you run in the module's playground, and the graded lab **Check Three Downloads Against Their Bundles** follows the fourth part.
+
+1. What Is Inside A Bundle
+2. Why A Verification Fails
+3. Verifying A Set Of Downloads
+4. Signing A Checksum List
+5. Summary
+
+### 3. Attesting Files And Release Archives
+
+Each part ends in a step you run in the module's playground, and the graded lab **Attest The Build Details Of A Release Archive** follows the fourth part.
+
+1. The In-toto Statement For A File
+2. Creating A File Attestation
+3. Verifying A File Attestation
+4. Predicate Types And SBOMs For Files
+5. Summary
 
 ## Section capstone: Repair The Signatures Of A Release Download
 

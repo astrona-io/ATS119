@@ -1,0 +1,61 @@
+# Attest The Build Details Of A Release Archive
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-119-lab-020-03"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-tools"
+      description: "Starts the registry and the workstation with cosign v3.1.4 and syft v1.55.0, and copies the example images"
+      type: "file"
+      source: "bootstrap/01-install-tools.sh"
+    - name: "ats-119-lab-020-03-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Registry and workstation (namespaces registry and workstation)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-workstation"
+      description: "Waits until the workstation has its tools and the registry answers"
+      type: "file"
+      source: "testing/wait-for-workstation.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-attestation-verifies"
+      description: "Confirms the attestation bundle verifies against the archive with the release key"
+      type: "file"
+      source: "validation/validate-attestation-verifies.sh"
+    - name: "validate-subject-digest"
+      description: "Confirms the statement in the bundle names the archive by its sha256 digest"
+      type: "file"
+      source: "validation/validate-subject-digest.sh"
+    - name: "validate-tamper-detected"
+      description: "Confirms a changed copy of the archive no longer verifies"
+      type: "file"
+      source: "validation/validate-tamper-detected.sh"
+    - name: "validate-archive-unchanged"
+      description: "Confirms the release archive was not changed"
+      type: "file"
+      source: "validation/validate-archive-unchanged.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - alpine:3.22
+      - registry:3.1.2

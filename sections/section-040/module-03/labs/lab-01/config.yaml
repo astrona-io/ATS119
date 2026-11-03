@@ -1,0 +1,58 @@
+# Find Out Which KMS Key Signed Which Release
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-119-lab-040-03"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-tools"
+      description: "Starts the registry and the workstation with cosign v3.1.4 and syft v1.55.0, and OpenBao 2.7.1 in development mode, and copies the example images"
+      type: "file"
+      source: "bootstrap/01-install-tools.sh"
+    - name: "ats-119-lab-040-03-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Registry and workstation (namespaces registry and workstation)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-workstation"
+      description: "Waits until the workstation has its tools and the registry answers"
+      type: "file"
+      source: "testing/wait-for-workstation.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-exported-keys"
+      description: "Confirms audit-a.pub and audit-b.pub hold the public keys of the two Transit keys"
+      type: "file"
+      source: "validation/validate-exported-keys.sh"
+    - name: "validate-signer-report"
+      description: "Confirms the report names the Transit key that signed each release"
+      type: "file"
+      source: "validation/validate-signer-report.sh"
+    - name: "validate-no-private-key-files"
+      description: "Confirms no private key file was written to /work/keys"
+      type: "file"
+      source: "validation/validate-no-private-key-files.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - alpine:3.22
+      - quay.io/openbao/openbao:2.7.1
+      - registry:3.1.2

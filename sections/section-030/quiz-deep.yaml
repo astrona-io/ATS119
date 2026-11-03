@@ -1,0 +1,239 @@
+# Deeper knowledge check for section 030. Listed in astrona.yaml as a `type: quiz` entry.
+schema_version: 1
+kind: question_bank
+id: ats119-030-deep
+course_id: ATS119
+exam_code: SIGSTORE
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-030-deep
+  title: Attestations In Depth
+placement:
+  position: after
+  reading: sections/section-030/capstone/labs/lab-01/question.md
+questions:
+- id: ats119-030d-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know the SBOM tool
+  source_readings:
+  - sections/section-030/module-02/course-01-generating-an-sbom-with-syft.md
+  prompt: Which command writes an SPDX JSON SBOM for an image in the lab registry?
+  options:
+  - id: a
+    text: "`cosign sbom`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: "`regctl sbom`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: "`syft scan registry:...@digest -o spdx-json=file`."
+    explanation: Correct. syft scans the image by digest.
+  - id: d
+    text: "`docker build --sbom`."
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: c
+  explanation: Correct. syft scans the image by digest.
+- id: ats119-030d-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Attach an SBOM
+  source_readings:
+  - sections/section-030/module-02/course-02-attaching-an-sbom-as-an-attestation.md
+  prompt: How is an SBOM attached as an attestation?
+  options:
+  - id: a
+    text: "`cosign sign -a sbom=file`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: "`cosign attest` with `--type spdxjson` and the SBOM as predicate."
+    explanation: Correct. The SBOM is the predicate of the statement.
+  - id: c
+    text: "`regctl image copy`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: "`cosign clean`."
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: b
+  explanation: Correct. The SBOM is the predicate of the statement.
+- id: ats119-030d-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use custom predicates
+  source_readings:
+  - sections/section-030/module-02/course-03-custom-predicate-types.md
+  prompt: What identifies a custom predicate type?
+  options:
+  - id: a
+    text: A URI or the short name `custom`.
+    explanation: Correct. The predicateType field tells consumers how to read the
+      predicate.
+  - id: b
+    text: The file name.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: The tag.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: The key password.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: a
+  explanation: Correct. The predicateType field tells consumers how to read the predicate.
+- id: ats119-030d-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Read in scripts
+  source_readings:
+  - sections/section-030/module-02/course-04-reading-attestations-in-scripts.md
+  prompt: Where is the statement inside a bundle from verify-attestation?
+  options:
+  - id: a
+    text: In the image config.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: In `.optional`.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: In the key file.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: In `.dsseEnvelope.payload`, base64 encoded.
+    explanation: Correct. Decode the payload to read the statement with `jq`.
+  correct_option: d
+  explanation: Correct. Decode the payload to read the statement with `jq`.
+- id: ats119-030d-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know how the policy runs
+  source_readings:
+  - sections/section-030/module-03/course-01-how-cosign-evaluates-a-policy.md
+  prompt: Which query does cosign run against a Rego v0 policy?
+  options:
+  - id: a
+    text: "`data.cosign.main`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: "`data.policy.deny`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: "`data.signature.allow`."
+    explanation: Correct. The package is `signature` and the rule is `allow`.
+  - id: d
+    text: "`data.input.ok`."
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: c
+  explanation: Correct. The package is `signature` and the rule is `allow`.
+- id: ats119-030d-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know the policy input
+  source_readings:
+  - sections/section-030/module-03/course-01-how-cosign-evaluates-a-policy.md
+  prompt: What is `input` in the policy?
+  options:
+  - id: a
+    text: The image manifest.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: The in-toto statement of the attestation.
+    explanation: Correct. Rules read fields such as `input.predicate`.
+  - id: c
+    text: The public key.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: The registry catalog.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: b
+  explanation: Correct. Rules read fields such as `input.predicate`.
+- id: ats119-030d-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Handle several attestations
+  source_readings:
+  - sections/section-030/module-03/course-02-running-and-testing-a-policy.md
+  prompt: There are two attestations of the same type and one violates the policy.
+    What is the result?
+  options:
+  - id: a
+    text: The check fails.
+    explanation: Correct. Every attestation of the type must pass.
+  - id: b
+    text: It passes if one is fine.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: It passes with a warning.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: It skips the bad one.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: a
+  explanation: Correct. Every attestation of the type must pass.
+- id: ats119-030d-q08
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know accepted policy formats
+  source_readings:
+  - sections/section-030/module-03/course-04-cue-and-policies-in-a-release-process.md
+  prompt: Which file types can `--policy` take?
+  options:
+  - id: a
+    text: Only YAML.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: Only shell scripts.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: Only JSON.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: Rego and CUE files.
+    explanation: Correct. CUE is accepted in addition to Rego.
+  correct_option: d
+  explanation: Correct. CUE is accepted in addition to Rego.
+- id: ats119-030d-q09
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Build a gate
+  source_readings:
+  - sections/section-030/module-01/course-04-building-a-release-gate-from-attestations.md
+  prompt: Why must a gate fail when the policy file is missing?
+  options:
+  - id: a
+    text: The file holds the key.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: cosign cannot start without it.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: A missing rule must not make a release pass.
+    explanation: Correct. Failing closed is the safe default.
+  - id: d
+    text: The registry needs it.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: c
+  explanation: Correct. Failing closed is the safe default.
+- id: ats119-030d-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Separate roles
+  source_readings:
+  - sections/section-030/module-01/course-04-building-a-release-gate-from-attestations.md
+  prompt: Why should the gate hold only the public key?
+  options:
+  - id: a
+    text: Public keys are faster.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: If it could sign, it could make a failing release pass.
+    explanation: Correct. Signing stays with the release process.
+  - id: c
+    text: Private keys expire.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: Gates cannot read files.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: b
+  explanation: Correct. Signing stays with the release process.

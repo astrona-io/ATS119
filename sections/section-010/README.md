@@ -13,7 +13,7 @@ A container image travels from a build system through a registry to a cluster, a
 
 ## The learning path
 
-The section has one module, with a landing page, three short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground, a cluster where you can explore freely.
+The section has three modules. The first has a landing page, four short parts, a graded lab right after the part it tests, and a summary. The landing page starts the module's playground, a cluster where you can explore freely.
 
 ### 1. Sign And Verify Container Images With A Key Pair
 
@@ -22,7 +22,28 @@ The playground holds a registry with two versions of the `podinfo` image and the
 1. Key Pairs And Signing An Image By Digest
 2. Where The Signature Lives In The Registry
 3. Verifying Signatures And Annotations, followed by the lab **Sign The Release Digest With Annotations**
-4. Summary
+4. Troubleshooting Signing And Verification
+5. Summary
+
+### 2. Annotations And Release Stage Signatures
+
+Each part ends in a step you run in the module's playground, and the graded lab **Add A Production Signature With Annotations** follows the fourth part.
+
+1. Annotations In The Signed Payload
+2. Several Signatures On One Digest
+3. Requiring Annotations When Verifying
+4. A Promotion Flow With Stage Signatures
+5. Summary
+
+### 3. Referrers, Fallback Tags And Unsigned Images
+
+Each part ends in a step you run in the module's playground, and the graded lab **Inventory The Signatures In The Registry** follows the fourth part.
+
+1. Referrers And The Subject Field
+2. The Fallback Tag
+3. Finding Unsigned Images
+4. Several Keys And Retiring Signatures
+5. Summary
 
 ## Section capstone: Repair The Signature Of A Release Channel
 

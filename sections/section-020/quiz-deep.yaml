@@ -1,0 +1,242 @@
+# Deeper knowledge check for section 020. Listed in astrona.yaml as a `type: quiz` entry.
+schema_version: 1
+kind: question_bank
+id: ats119-020-deep
+course_id: ATS119
+exam_code: SIGSTORE
+status: draft
+provenance: Original practice material written for this course; not official exam
+  questions.
+scope:
+  type: section
+  id: section-020-deep
+  title: Blob Signing In Depth
+placement:
+  position: after
+  reading: sections/section-020/capstone/labs/lab-01/question.md
+questions:
+- id: ats119-020d-q01
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know what a bundle holds
+  source_readings:
+  - sections/section-020/module-02/course-01-what-is-inside-a-bundle.md
+  prompt: What does a Sigstore bundle for a blob hold?
+  options:
+  - id: a
+    text: The private key.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: The signature and the verification material in one file.
+    explanation: Correct. The verifier needs only the file, the bundle and the public
+      key.
+  - id: c
+    text: The whole signed file.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: The registry credentials.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: b
+  explanation: Correct. The verifier needs only the file, the bundle and the public
+    key.
+- id: ats119-020d-q02
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Explain a failure
+  source_readings:
+  - sections/section-020/module-02/course-02-why-a-verification-fails.md
+  prompt: A downloaded file verifies against its bundle in one place and not in another.
+    What is the most likely cause?
+  options:
+  - id: a
+    text: The file content differs, so its digest differs.
+    explanation: Correct. A signature covers the digest of the exact content.
+  - id: b
+    text: The bundle is too old.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: The key password changed.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: The registry is offline.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: a
+  explanation: Correct. A signature covers the digest of the exact content.
+- id: ats119-020d-q03
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Verify a set
+  source_readings:
+  - sections/section-020/module-02/course-03-verifying-a-set-of-downloads.md
+  prompt: How can a script check a set of downloads?
+  options:
+  - id: a
+    text: Run `cosign verify` once on the folder.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: Run `sha256sum` only.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: Run `cosign sign-blob` again.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: Run `cosign verify-blob` per file with its bundle and record the exit status.
+    explanation: Correct. Each file has its own bundle and result.
+  correct_option: d
+  explanation: Correct. Each file has its own bundle and result.
+- id: ats119-020d-q04
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Sign a checksum list
+  source_readings:
+  - sections/section-020/module-02/course-04-signing-a-checksum-list.md
+  prompt: Why sign a checksum list?
+  options:
+  - id: a
+    text: It encrypts the files.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: It removes the need for a public key.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: One signature then covers every file listed, through their hashes.
+    explanation: Correct. The consumer checks the list, then the hashes of the files.
+  - id: d
+    text: It speeds up downloads.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: c
+  explanation: Correct. The consumer checks the list, then the hashes of the files.
+- id: ats119-020d-q05
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Know the in-toto subject
+  source_readings:
+  - sections/section-020/module-03/course-01-the-in-toto-statement-for-a-file.md
+  prompt: What does the subject of an in-toto statement for a file name?
+  options:
+  - id: a
+    text: The signer's password.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: The file name and its digest.
+    explanation: Correct. The statement is about the content with that digest.
+  - id: c
+    text: The registry URL.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: The cosign version.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: b
+  explanation: Correct. The statement is about the content with that digest.
+- id: ats119-020d-q06
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Use attest-blob
+  source_readings:
+  - sections/section-020/module-03/course-02-creating-a-file-attestation.md
+  prompt: Which command attaches a custom predicate to a release archive?
+  options:
+  - id: a
+    text: "`cosign attest-blob` with `--predicate` and `--type custom`."
+    explanation: Correct. `attest-blob` creates a signed statement for a file.
+  - id: b
+    text: "`cosign sign` with `-a`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: "`cosign clean`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: "`cosign tree`."
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: a
+  explanation: Correct. `attest-blob` creates a signed statement for a file.
+- id: ats119-020d-q07
+  type: single_choice
+  difficulty: intermediate
+  learning_objective: Verify an attestation
+  source_readings:
+  - sections/section-020/module-03/course-03-verifying-a-file-attestation.md
+  prompt: Which command verifies a file attestation?
+  options:
+  - id: a
+    text: "`cosign verify`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: "`cosign verify-attestation`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: "`cosign public-key`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: "`cosign verify-blob-attestation`."
+    explanation: Correct. The blob variant takes the bundle and the file.
+  correct_option: d
+  explanation: Correct. The blob variant takes the bundle and the file.
+- id: ats119-020d-q08
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Check the tamper case
+  source_readings:
+  - sections/section-020/module-03/course-03-verifying-a-file-attestation.md
+  prompt: The archive is changed after it was attested. What does verification do?
+  options:
+  - id: a
+    text: It passes, because the bundle is valid.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: It updates the bundle.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: It fails, because the subject digest no longer matches.
+    explanation: Correct. The statement names the old digest.
+  - id: d
+    text: It passes with a warning.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: c
+  explanation: Correct. The statement names the old digest.
+- id: ats119-020d-q09
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know predicate types
+  source_readings:
+  - sections/section-020/module-03/course-04-predicate-types-and-sboms-for-files.md
+  prompt: Which short names can `--type` use?
+  options:
+  - id: a
+    text: Only custom.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: custom, slsaprovenance1, spdxjson, cyclonedx, vuln and openvex, or a URI.
+    explanation: Correct. These are the types cosign accepts.
+  - id: c
+    text: Only URLs.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: gpg and pgp.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: b
+  explanation: Correct. These are the types cosign accepts.
+- id: ats119-020d-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Distribute the key
+  source_readings:
+  - sections/section-020/module-01/course-03-getting-the-public-key-to-consumers.md
+  prompt: What gives consumers trust in a public key?
+  options:
+  - id: a
+    text: A second channel, such as a published hash, apart from the download.
+    explanation: Correct. Whoever can replace the file can replace the key on the
+      same page.
+  - id: b
+    text: Placing it on the download page only.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: Signing it with itself.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: Renaming it release.pub.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: a
+  explanation: Correct. Whoever can replace the file can replace the key on the same
+    page.

@@ -1,0 +1,57 @@
+# Inventory The Signatures In The Registry
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-119-lab-010-03"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-tools"
+      description: "Starts the registry and the workstation with cosign v3.1.4 and syft v1.55.0, and copies the example images"
+      type: "file"
+      source: "bootstrap/01-install-tools.sh"
+    - name: "ats-119-lab-010-03-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Registry and workstation (namespaces registry and workstation)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-workstation"
+      description: "Waits until the workstation has its tools and the registry answers"
+      type: "file"
+      source: "testing/wait-for-workstation.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-referrer-list"
+      description: "Confirms referrers.txt lists exactly the referrers of the 6.15.0 digest"
+      type: "file"
+      source: "validation/validate-referrer-list.sh"
+    - name: "validate-fallback-tag"
+      description: "Confirms fallback-tag.txt names the tag that lists the referrers of 6.15.0"
+      type: "file"
+      source: "validation/validate-fallback-tag.sh"
+    - name: "validate-unsigned-tags"
+      description: "Confirms unsigned.txt lists the tags that have no referrers"
+      type: "file"
+      source: "validation/validate-unsigned-tags.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - alpine:3.22
+      - registry:3.1.2

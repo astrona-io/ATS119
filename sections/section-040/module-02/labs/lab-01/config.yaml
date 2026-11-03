@@ -1,0 +1,66 @@
+# Import A Legacy PEM Key And Re-Protect It
+# Astrona graded lab. Schema: internal/config.LabConfig.
+
+metadata:
+  name: "ats-119-lab-040-02"
+  docs:
+    guide: "solution.md"
+    solution: "solution.md"
+    question: "question.md"
+    examQuestion: "question.md"
+    prerequisites: "prerequisites.md"
+bootstrap:
+  init:
+    - name: "install-tools"
+      description: "Starts the registry and the workstation with cosign v3.1.4 and syft v1.55.0, and OpenBao 2.7.1 in development mode, and copies the example images"
+      type: "file"
+      source: "bootstrap/01-install-tools.sh"
+    - name: "ats-119-lab-040-02-setup"
+      description: "Creates the starting state the task works from"
+      type: "file"
+      source: "bootstrap/02-seed-state.sh"
+  manifests:
+    - name: "lab-start"
+      description: "Registry and workstation (namespaces registry and workstation)."
+      type: "file"
+      source: "manifests/lab-start.yaml"
+testing:
+  init:
+    - name: "wait-for-workstation"
+      description: "Waits until the workstation has its tools and the registry answers"
+      type: "file"
+      source: "testing/wait-for-workstation.sh"
+    - name: "reference-solution"
+      description: "The remediation a correct learner performs; used by `astrona test`"
+      type: "file"
+      source: "solution/apply.sh"
+validation:
+  scripts:
+    - name: "validate-imported-key-matches"
+      description: "Confirms the imported key pair has the same public key as the legacy key"
+      type: "file"
+      source: "validation/validate-imported-key-matches.sh"
+    - name: "validate-new-password"
+      description: "Confirms the imported private key opens with the new password and not the old one"
+      type: "file"
+      source: "validation/validate-new-password.sh"
+    - name: "validate-old-signature-still-valid"
+      description: "Confirms 6.14.1 still verifies with the imported public key"
+      type: "file"
+      source: "validation/validate-old-signature-still-valid.sh"
+    - name: "validate-new-signature"
+      description: "Confirms 6.15.0 is signed by the imported key with the annotation rotated=true"
+      type: "file"
+      source: "validation/validate-new-signature.sh"
+    - name: "validate-pem-untouched"
+      description: "Confirms the legacy PEM file was not changed"
+      type: "file"
+      source: "validation/validate-pem-untouched.sh"
+teardown:
+  keepCluster: false
+runtime:
+  kind:
+    preloadImages:
+      - alpine:3.22
+      - quay.io/openbao/openbao:2.7.1
+      - registry:3.1.2

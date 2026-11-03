@@ -2,7 +2,7 @@
 
 Signing is easy; keeping the signing key safe for years is the hard part. A key file can be copied, a password can leak, and a key that signed a hundred releases cannot simply be thrown away. This module covers the options cosign gives you, from an encrypted file to a key that lives in a key management service. Keep one sentence in mind: **the private key must stay where only the signer can use it, and the public keys must stay where every verifier can find them.**
 
-The module has three parts. **Key Files, Passwords And Imported Keys** looks inside the encrypted key file, imports an existing key, and exports a public key. **Keys In A Key Management Service** creates a signing key in OpenBao's Transit engine and signs with it, so the private key never leaves OpenBao. **Rotating Keys And Reading The Signed Payload** reads what a signature actually covers and replaces a release key with a new one. A graded lab follows the third part.
+The module has four parts. **Key Files, Passwords And Imported Keys** looks inside the encrypted key file, imports an existing key, and exports a public key. **Keys In A Key Management Service** creates a signing key in OpenBao's Transit engine and signs with it, so the private key never leaves OpenBao. **Rotating Keys And Reading The Signed Payload** reads what a signature actually covers and replaces a release key with a new one. **Planning A Key Rotation** describes the overlap period and the trust set that consumers use. A graded lab follows the third part.
 
 ## Learning objectives
 
@@ -14,6 +14,7 @@ After this module you can:
 - Create a key in OpenBao Transit with `cosign generate-key-pair --kms` and sign with it.
 - Name the fields of the signed payload of an image.
 - Rotate a release key and publish a trust set with the old and the new public key.
+- Plan a rotation with an overlap period and handle a compromised key.
 
 ## Before you start
 

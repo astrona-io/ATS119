@@ -102,8 +102,105 @@ modules:
           - name: "cosign sign reference (v3.1.4)"
             url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_sign.md
       - type: reading
+        title: "Troubleshooting Signing And Verification"
+        path: sections/section-010/module-01/course-04-troubleshooting-signing-and-verification.md
+      - type: reading
         title: Summary
-        path: sections/section-010/module-01/course-04-summary.md
+        path: sections/section-010/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Annotations And Release Stage Signatures"
+        path: sections/section-010/module-02/course.md
+
+      - type: reading
+        title: "Annotations In The Signed Payload"
+        path: sections/section-010/module-02/course-01-annotations-in-the-signed-payload.md
+
+      - type: reading
+        title: "Several Signatures On One Digest"
+        path: sections/section-010/module-02/course-02-several-signatures-on-one-digest.md
+
+      - type: reading
+        title: "Requiring Annotations When Verifying"
+        path: sections/section-010/module-02/course-03-requiring-annotations-when-verifying.md
+
+      - type: reading
+        title: "A Promotion Flow With Stage Signatures"
+        path: sections/section-010/module-02/course-04-a-promotion-flow-with-stage-signatures.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/module-02/labs/lab-01/question.md
+
+      - type: lab
+        title: "Add A Production Signature With Annotations Lab"
+        path: sections/section-010/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 15m
+        topic: image-signing
+        task_kind: build
+        tags: [cosign-sign, annotations, cosign-verify, stage-signatures]
+        learning_goals:
+          - Sign the release digest with a production annotation set
+          - Keep the staging signature and verify each stage separately
+          - Show that the older release has no production signature
+        resources:
+          - name: "Signing containers"
+            url: https://docs.sigstore.dev/cosign/signing/signing_with_containers/
+          - name: "cosign sign reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_sign.md
+
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-02/course-05-summary.md
+
+
+      - type: reading
+        title: "Referrers, Fallback Tags And Unsigned Images"
+        path: sections/section-010/module-03/course.md
+
+      - type: reading
+        title: "Referrers And The Subject Field"
+        path: sections/section-010/module-03/course-01-referrers-and-the-subject-field.md
+
+      - type: reading
+        title: "The Fallback Tag"
+        path: sections/section-010/module-03/course-02-the-fallback-tag.md
+
+      - type: reading
+        title: "Finding Unsigned Images"
+        path: sections/section-010/module-03/course-03-finding-unsigned-images.md
+
+      - type: reading
+        title: "Several Keys And Retiring Signatures"
+        path: sections/section-010/module-03/course-04-several-keys-and-retiring-signatures.md
+
+      - type: reading
+        title: Question
+        path: sections/section-010/module-03/labs/lab-01/question.md
+
+      - type: lab
+        title: "Inventory The Signatures In The Registry Lab"
+        path: sections/section-010/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: image-signing
+        task_kind: build
+        tags: [cosign-tree, referrers, fallback-tag, regctl]
+        learning_goals:
+          - List the referrers of a digest with regctl
+          - Name the fallback tag that holds the signatures on a registry without the referrers API
+          - List the tags that have no signature
+        resources:
+          - name: "Signing containers"
+            url: https://docs.sigstore.dev/cosign/signing/signing_with_containers/
+          - name: "OCI referrers API"
+            url: https://github.com/opencontainers/distribution-spec/blob/main/spec.md
+
+      - type: reading
+        title: Summary
+        path: sections/section-010/module-03/course-05-summary.md
+
 
       - type: reading
         title: Question
@@ -128,6 +225,10 @@ modules:
       - type: quiz
         title: "Knowledge Check: Signing And Verifying Container Images"
         path: sections/section-010/quiz.yaml
+        pass_score: 70
+      - type: quiz
+        title: "Knowledge Check: Image Signing In Depth"
+        path: sections/section-010/quiz-deep.yaml
         pass_score: 70
 
   - id: module-020
@@ -173,8 +274,105 @@ modules:
           - name: "cosign sign-blob reference (v3.1.4)"
             url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_sign-blob.md
       - type: reading
+        title: "Getting The Public Key To Consumers"
+        path: sections/section-020/module-01/course-03-getting-the-public-key-to-consumers.md
+      - type: reading
         title: Summary
-        path: sections/section-020/module-01/course-03-summary.md
+        path: sections/section-020/module-01/course-04-summary.md
+
+      - type: reading
+        title: "Verifying Blob Bundles And Downloads"
+        path: sections/section-020/module-02/course.md
+
+      - type: reading
+        title: "What Is Inside A Bundle"
+        path: sections/section-020/module-02/course-01-what-is-inside-a-bundle.md
+
+      - type: reading
+        title: "Why A Verification Fails"
+        path: sections/section-020/module-02/course-02-why-a-verification-fails.md
+
+      - type: reading
+        title: "Verifying A Set Of Downloads"
+        path: sections/section-020/module-02/course-03-verifying-a-set-of-downloads.md
+
+      - type: reading
+        title: "Signing A Checksum List"
+        path: sections/section-020/module-02/course-04-signing-a-checksum-list.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/module-02/labs/lab-01/question.md
+
+      - type: lab
+        title: "Check Three Downloads Against Their Bundles Lab"
+        path: sections/section-020/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: blob-signing
+        task_kind: troubleshooting
+        tags: [cosign-verify-blob, bundle, downloads]
+        learning_goals:
+          - Verify several downloads against their bundles
+          - Report which downloads verify and which do not
+          - Leave every download and bundle unchanged
+        resources:
+          - name: "Signing blobs"
+            url: https://docs.sigstore.dev/cosign/signing/signing_with_blobs/
+          - name: "cosign verify-blob reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_verify-blob.md
+
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-02/course-05-summary.md
+
+
+      - type: reading
+        title: "Attesting Files And Release Archives"
+        path: sections/section-020/module-03/course.md
+
+      - type: reading
+        title: "The In-toto Statement For A File"
+        path: sections/section-020/module-03/course-01-the-in-toto-statement-for-a-file.md
+
+      - type: reading
+        title: "Creating A File Attestation"
+        path: sections/section-020/module-03/course-02-creating-a-file-attestation.md
+
+      - type: reading
+        title: "Verifying A File Attestation"
+        path: sections/section-020/module-03/course-03-verifying-a-file-attestation.md
+
+      - type: reading
+        title: "Predicate Types And SBOMs For Files"
+        path: sections/section-020/module-03/course-04-predicate-types-and-sboms-for-files.md
+
+      - type: reading
+        title: Question
+        path: sections/section-020/module-03/labs/lab-01/question.md
+
+      - type: lab
+        title: "Attest The Build Details Of A Release Archive Lab"
+        path: sections/section-020/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: attestation
+        task_kind: build
+        tags: [attest-blob, in-toto, predicate, verify-blob-attestation]
+        learning_goals:
+          - Attest a release archive with a custom predicate
+          - Verify the attestation and check its subject digest
+          - Show that a changed archive no longer verifies
+        resources:
+          - name: "Attestations"
+            url: https://docs.sigstore.dev/cosign/verifying/attestation/
+          - name: "cosign attest-blob reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_attest-blob.md
+
+      - type: reading
+        title: Summary
+        path: sections/section-020/module-03/course-05-summary.md
+
 
       - type: reading
         title: Question
@@ -199,6 +397,10 @@ modules:
       - type: quiz
         title: "Knowledge Check: Signing Blobs, Bundles And SBOMs"
         path: sections/section-020/quiz.yaml
+        pass_score: 70
+      - type: quiz
+        title: "Knowledge Check: Blob Signing In Depth"
+        path: sections/section-020/quiz-deep.yaml
         pass_score: 70
 
   - id: module-030
@@ -248,8 +450,105 @@ modules:
         title: "Checking Attestations With A Policy"
         path: sections/section-030/module-01/course-03-checking-attestations-with-a-policy.md
       - type: reading
+        title: "Building A Release Gate From Attestations"
+        path: sections/section-030/module-01/course-04-building-a-release-gate-from-attestations.md
+      - type: reading
         title: Summary
-        path: sections/section-030/module-01/course-04-summary.md
+        path: sections/section-030/module-01/course-05-summary.md
+
+      - type: reading
+        title: "SBOM And Custom Attestations On Images"
+        path: sections/section-030/module-02/course.md
+
+      - type: reading
+        title: "Generating An SBOM With Syft"
+        path: sections/section-030/module-02/course-01-generating-an-sbom-with-syft.md
+
+      - type: reading
+        title: "Attaching An SBOM As An Attestation"
+        path: sections/section-030/module-02/course-02-attaching-an-sbom-as-an-attestation.md
+
+      - type: reading
+        title: "Custom Predicate Types"
+        path: sections/section-030/module-02/course-03-custom-predicate-types.md
+
+      - type: reading
+        title: "Reading Attestations In Scripts"
+        path: sections/section-030/module-02/course-04-reading-attestations-in-scripts.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/module-02/labs/lab-01/question.md
+
+      - type: lab
+        title: "Attach An SBOM And A Review Attestation Lab"
+        path: sections/section-030/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: attestation
+        task_kind: build
+        tags: [cosign-attest, sbom, spdx, syft, custom-predicate]
+        learning_goals:
+          - Generate an SPDX SBOM for an image and attach it as an attestation
+          - Attach a custom review attestation
+          - Verify both attestation types for the same digest
+        resources:
+          - name: "Attestations"
+            url: https://docs.sigstore.dev/cosign/verifying/attestation/
+          - name: "cosign attest reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_attest.md
+
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-02/course-05-summary.md
+
+
+      - type: reading
+        title: "Rego Policies For Attestation Content"
+        path: sections/section-030/module-03/course.md
+
+      - type: reading
+        title: "How Cosign Evaluates A Policy"
+        path: sections/section-030/module-03/course-01-how-cosign-evaluates-a-policy.md
+
+      - type: reading
+        title: "Running And Testing A Policy"
+        path: sections/section-030/module-03/course-02-running-and-testing-a-policy.md
+
+      - type: reading
+        title: "Rules On SBOM Content"
+        path: sections/section-030/module-03/course-03-rules-on-sbom-content.md
+
+      - type: reading
+        title: "CUE And Policies In A Release Process"
+        path: sections/section-030/module-03/course-04-cue-and-policies-in-a-release-process.md
+
+      - type: reading
+        title: Question
+        path: sections/section-030/module-03/labs/lab-01/question.md
+
+      - type: lab
+        title: "Require A Trusted SBOM Tool With A Rego Policy Lab"
+        path: sections/section-030/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 25m
+        topic: attestation-policy
+        task_kind: build
+        tags: [verify-attestation, rego, policy, sbom]
+        learning_goals:
+          - Write a Rego policy that checks the tool recorded in an SBOM attestation
+          - Run the policy with cosign verify-attestation --policy
+          - Show that an attestation from another tool is rejected
+        resources:
+          - name: "Attestations"
+            url: https://docs.sigstore.dev/cosign/verifying/attestation/
+          - name: "cosign verify-attestation reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_verify-attestation.md
+
+      - type: reading
+        title: Summary
+        path: sections/section-030/module-03/course-05-summary.md
+
 
       - type: reading
         title: Question
@@ -274,6 +573,10 @@ modules:
       - type: quiz
         title: "Knowledge Check: Attestations And Policies"
         path: sections/section-030/quiz.yaml
+        pass_score: 70
+      - type: quiz
+        title: "Knowledge Check: Attestations In Depth"
+        path: sections/section-030/quiz-deep.yaml
         pass_score: 70
 
   - id: module-040
@@ -321,8 +624,105 @@ modules:
           - name: "Verifying signatures"
             url: https://docs.sigstore.dev/cosign/verifying/verify/
       - type: reading
+        title: "Planning A Key Rotation"
+        path: sections/section-040/module-01/course-04-planning-a-key-rotation.md
+      - type: reading
         title: Summary
-        path: sections/section-040/module-01/course-04-summary.md
+        path: sections/section-040/module-01/course-05-summary.md
+
+      - type: reading
+        title: "Importing Keys And Changing Their Passwords"
+        path: sections/section-040/module-02/course.md
+
+      - type: reading
+        title: "Key Files And Passwords"
+        path: sections/section-040/module-02/course-01-key-files-and-passwords.md
+
+      - type: reading
+        title: "Importing An Existing PEM Key"
+        path: sections/section-040/module-02/course-02-importing-an-existing-pem-key.md
+
+      - type: reading
+        title: "Changing A Key Password"
+        path: sections/section-040/module-02/course-03-changing-a-key-password.md
+
+      - type: reading
+        title: "Proving The Identity Survived"
+        path: sections/section-040/module-02/course-04-proving-the-identity-survived.md
+
+      - type: reading
+        title: Question
+        path: sections/section-040/module-02/labs/lab-01/question.md
+
+      - type: lab
+        title: "Import A Legacy PEM Key And Re-Protect It Lab"
+        path: sections/section-040/module-02/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: key-management
+        task_kind: build
+        tags: [import-key-pair, pem, password, key-rotation]
+        learning_goals:
+          - Import a legacy PEM key as a cosign key pair with a new password
+          - Sign a release with the imported key
+          - Show that the old signature still verifies with the same public identity
+        resources:
+          - name: "Key management overview"
+            url: https://docs.sigstore.dev/cosign/key_management/overview/
+          - name: "cosign import-key-pair reference (v3.1.4)"
+            url: https://github.com/sigstore/cosign/blob/v3.1.4/doc/cosign_import-key-pair.md
+
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-02/course-05-summary.md
+
+
+      - type: reading
+        title: "Auditing And Controlling KMS Keys"
+        path: sections/section-040/module-03/course.md
+
+      - type: reading
+        title: "Keys In The Transit Engine"
+        path: sections/section-040/module-03/course-01-keys-in-the-transit-engine.md
+
+      - type: reading
+        title: "Exporting And Using The Public Key"
+        path: sections/section-040/module-03/course-02-exporting-and-using-the-public-key.md
+
+      - type: reading
+        title: "Finding Out Which Key Signed"
+        path: sections/section-040/module-03/course-03-finding-out-which-key-signed.md
+
+      - type: reading
+        title: "Controlling Who May Sign"
+        path: sections/section-040/module-03/course-04-controlling-who-may-sign.md
+
+      - type: reading
+        title: Question
+        path: sections/section-040/module-03/labs/lab-01/question.md
+
+      - type: lab
+        title: "Find Out Which KMS Key Signed Which Release Lab"
+        path: sections/section-040/module-03/labs/lab-01
+        difficulty: intermediate
+        estimated_duration: 20m
+        topic: key-management
+        task_kind: troubleshooting
+        tags: [kms, openbao, transit, public-key, audit]
+        learning_goals:
+          - Export the public keys of the Transit keys
+          - Work out which key signed each release
+          - Leave no private key file on disk
+        resources:
+          - name: "Key management overview"
+            url: https://docs.sigstore.dev/cosign/key_management/overview/
+          - name: "OpenBao Transit secrets engine"
+            url: https://openbao.org/docs/secrets/transit/
+
+      - type: reading
+        title: Summary
+        path: sections/section-040/module-03/course-05-summary.md
+
 
       - type: reading
         title: Question
@@ -349,6 +749,10 @@ modules:
       - type: quiz
         title: "Knowledge Check: Managing Signing Keys"
         path: sections/section-040/quiz.yaml
+        pass_score: 70
+      - type: quiz
+        title: "Knowledge Check: Key Management In Depth"
+        path: sections/section-040/quiz-deep.yaml
         pass_score: 70
       - type: quiz
         title: "Final Domain Quiz"

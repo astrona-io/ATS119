@@ -1,4 +1,4 @@
-# Final domain knowledge check across all four sections.
+# Final domain knowledge check across all sections, including the in-depth modules.
 schema_version: 1
 kind: question_bank
 id: ats119-final
@@ -291,3 +291,187 @@ questions:
     explanation: Not correct. Users still need the old one during the change.
   correct_option: a
   explanation: Correct. Users who trust only the old key keep working.
+- id: ats119-final-d010-q1
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Explain what an annotation does
+  source_readings:
+  - sections/section-010/module-02/course-01-annotations-in-the-signed-payload.md
+  prompt: Where does cosign put an annotation given with `-a env=production`?
+  options:
+  - id: a
+    text: Into the payload that is signed, under `optional`.
+    explanation: Correct. The signature covers the annotation, so it cannot be changed
+      afterwards.
+  - id: b
+    text: Into a file next to the key.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: Into the image layers.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: Into the registry tag name.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: a
+  explanation: Correct. The signature covers the annotation, so it cannot be changed
+    afterwards.
+- id: ats119-final-d010-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Troubleshoot a failure
+  source_readings:
+  - sections/section-010/module-01/course-04-troubleshooting-signing-and-verification.md
+  prompt: "`cosign verify` fails for the release key. What is the first check to tell
+    an unsigned image from a signature by another key?"
+  options:
+  - id: a
+    text: Reinstall cosign.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: Delete the tag and push again.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: Change `COSIGN_PASSWORD`.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: Run `cosign tree` on the digest and look at the signatures listed.
+    explanation: Correct. The tree shows whether signatures exist at all.
+  correct_option: d
+  explanation: Correct. The tree shows whether signatures exist at all.
+- id: ats119-final-d020-q1
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know what a bundle holds
+  source_readings:
+  - sections/section-020/module-02/course-01-what-is-inside-a-bundle.md
+  prompt: What does a Sigstore bundle for a blob hold?
+  options:
+  - id: a
+    text: The private key.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: The signature and the verification material in one file.
+    explanation: Correct. The verifier needs only the file, the bundle and the public
+      key.
+  - id: c
+    text: The whole signed file.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: The registry credentials.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: b
+  explanation: Correct. The verifier needs only the file, the bundle and the public
+    key.
+- id: ats119-final-d020-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Distribute the key
+  source_readings:
+  - sections/section-020/module-01/course-03-getting-the-public-key-to-consumers.md
+  prompt: What gives consumers trust in a public key?
+  options:
+  - id: a
+    text: A second channel, such as a published hash, apart from the download.
+    explanation: Correct. Whoever can replace the file can replace the key on the
+      same page.
+  - id: b
+    text: Placing it on the download page only.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: Signing it with itself.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: Renaming it release.pub.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: a
+  explanation: Correct. Whoever can replace the file can replace the key on the same
+    page.
+- id: ats119-final-d030-q1
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know the SBOM tool
+  source_readings:
+  - sections/section-030/module-02/course-01-generating-an-sbom-with-syft.md
+  prompt: Which command writes an SPDX JSON SBOM for an image in the lab registry?
+  options:
+  - id: a
+    text: "`cosign sbom`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: "`regctl sbom`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: "`syft scan registry:...@digest -o spdx-json=file`."
+    explanation: Correct. syft scans the image by digest.
+  - id: d
+    text: "`docker build --sbom`."
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: c
+  explanation: Correct. syft scans the image by digest.
+- id: ats119-final-d030-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Separate roles
+  source_readings:
+  - sections/section-030/module-01/course-04-building-a-release-gate-from-attestations.md
+  prompt: Why should the gate hold only the public key?
+  options:
+  - id: a
+    text: Public keys are faster.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: If it could sign, it could make a failing release pass.
+    explanation: Correct. Signing stays with the release process.
+  - id: c
+    text: Private keys expire.
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: Gates cannot read files.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: b
+  explanation: Correct. Signing stays with the release process.
+- id: ats119-final-d040-q1
+  type: single_choice
+  difficulty: beginner
+  learning_objective: Know import-key-pair
+  source_readings:
+  - sections/section-040/module-02/course-02-importing-an-existing-pem-key.md
+  prompt: Which command turns an existing PEM key into a cosign key pair?
+  options:
+  - id: a
+    text: "`cosign generate-key-pair`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: "`cosign public-key`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: "`cosign tree`."
+    explanation: Not correct. Check the reading for this topic.
+  - id: d
+    text: "`cosign import-key-pair`."
+    explanation: Correct. It reads the key and protects it with a password.
+  correct_option: d
+  explanation: Correct. It reads the key and protects it with a password.
+- id: ats119-final-d040-q10
+  type: single_choice
+  difficulty: advanced
+  learning_objective: Avoid key files
+  source_readings:
+  - sections/section-040/module-03/course-04-controlling-who-may-sign.md
+  prompt: What is the benefit of removing the file-based private key after moving
+    to KMS?
+  options:
+  - id: a
+    text: Signatures become smaller.
+    explanation: Not correct. Check the reading for this topic.
+  - id: b
+    text: Verification gets faster.
+    explanation: Not correct. Check the reading for this topic.
+  - id: c
+    text: No signing key is left on disk to copy.
+    explanation: Correct. Only the KMS can sign.
+  - id: d
+    text: The public key changes.
+    explanation: Not correct. Check the reading for this topic.
+  correct_option: c
+  explanation: Correct. Only the KMS can sign.
