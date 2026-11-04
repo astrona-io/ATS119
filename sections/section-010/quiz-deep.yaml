@@ -4,7 +4,7 @@ kind: question_bank
 id: ats119-010-deep
 course_id: ATS119
 exam_code: SIGSTORE
-status: draft
+status: alpha
 provenance: Original practice material written for this course; not official exam
   questions.
 scope:

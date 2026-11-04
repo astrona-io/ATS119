@@ -13,7 +13,7 @@
 training:
   id: ATS119
   title: "Sigstore: Cosign Container & Blob Artifact Signing"
-  maturity: draft
+  maturity: alpha
   description: >
     Training material covering the Cosign Container & Blob Artifact Signing
     domain of the Sigstore training path: key pairs and signing container
