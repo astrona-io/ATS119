@@ -1,3 +1,9 @@
+<p align="center">
+  <a href="https://astrona.io/courses/sigstore">
+    <img src="https://astrona.io/courses/sigstore/domains/ATS119.svg" alt="ATS119: Cosign Container & Blob Artifact Signing, part of the Sigstore course on Astrona" width="100%">
+  </a>
+</p>
+
 # ATS119 — Cosign Container & Blob Artifact Signing (Sigstore)
 
 Course material for the **Cosign Container & Blob Artifact Signing** domain of
